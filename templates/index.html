@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+    }
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Nunito:wght@700;800&display=swap" rel="stylesheet">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Passport Photo Editor</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.2.0/remixicon.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css" rel="stylesheet"/>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
+  <style>
+    
+    body { font-family: 'Inter', sans-serif; background-color: #ffffff; transition: background-color 0.3s ease, color 0.3s ease; }
+    html.dark body { background-color: #1a202c; }
+    
+    #particles-js {
+      position: fixed; width: 100%; height: 100%;
+      background-color: transparent; z-index: -1;
+    }
+    .glow-shadow { box-shadow: 0 0 15px rgba(59,130,246,0.5), 0 0 5px rgba(59,130,246,0.3); }
+    .glow-orange { box-shadow: 0 0 15px rgba(193,124,67,0.5), 0 0 5px rgba(193,124,67,0.3); }
+    .photo-card { transition: all 0.3s ease; }
+    .photo-card:hover { transform: translateY(-2px); }
+    .cropper-modal-overlay {
+      position: fixed; inset: 0; background: rgba(0,0,0,0.85);
+      z-index: 100; display: flex; align-items: center; justify-content: center;
+    }
+    .cropper-modal-box {
+      background: #ffffff; border: 1px solid #e5e7eb; border-radius: 1rem;
+      padding: 1.5rem; max-width: 520px; width: 95%;
+      max-height: 90vh;
+      display: flex; flex-direction: column;
+    }
+    html.dark .cropper-modal-box {
+      background: #1f2937; border: 1px solid #374151;
+    }
+    .cropper-image-area {
+      flex: 1 1 auto; overflow: hidden; min-height: 0;
+      border-radius: 0.5rem;
+    }
+    /* Background color chips */
+    .color-chip {
+      display: flex; align-items: center; gap: 10px;
+      padding: 8px 14px 8px 10px;
+      border-radius: 50px;
+      border: 1.5px solid rgba(0,0,0,0.1);
+      background: rgba(0,0,0,0.04);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      user-select: none;
+    }
+    html.dark .color-chip {
+      border: 1.5px solid rgba(255,255,255,0.08);
+      background: rgba(255,255,255,0.04);
+    }
+
+    .color-chip.selected {
+      background: rgba(96,165,250,0.12);
+    }
+    .chip-dot {
+      width: 22px; height: 22px; border-radius: 50%;
+      flex-shrink: 0; position: relative;
+      box-shadow: inset 0 0 0 1px rgba(0,0,0,0.18);
+    }
+    .color-chip.selected .chip-dot::after {
+      content: '';
+      position: absolute; inset: 0;
+      border-radius: 50%;
+      background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='3.5'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M5 13l4 4L19 7'/%3E%3C/svg%3E") center/14px no-repeat;
+    }
+    .chip-label { font-size: 0.8rem; font-weight: 500; color: #475569; letter-spacing: 0.01em; }
+    html.dark .chip-label { color: #cbd5e1; }
+  </style>
+</head>
+<body class="bg-white text-gray-900 dark:bg-gray-900 dark:text-white" oncontextmenu="return false">
+
+  <div id="particles-js" class="hidden sm:block"></div>
+
+  <!-- Navbar -->
+  <nav class="sticky top-0 z-50 bg-white/80 dark:bg-gray-900/80 backdrop-blur-md border-b border-gray-300 dark:border-gray-700 transition-colors shadow-sm">
+    <div class="container mx-auto px-3 sm:px-6 lg:px-8 flex items-center justify-between h-16 w-full">
+        <div class="flex items-center min-w-0 flex-1 mr-2">
+            <span class="truncate text-[18px] text-[#006b8f] font-medium dark:text-[#38bdf8]">Passport Photo Editor</span>
+        </div>
+        
+        <div class="flex items-center gap-4 sm:gap-5 flex-shrink-0 pr-3 sm:pr-0">
+          <button id="themeToggle" class="p-1.5 sm:p-2 text-gray-700 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors focus:outline-none flex items-center justify-center">
+            <svg id="themeToggleSun" class="w-[22px] h-[22px] sm:w-6 sm:h-6 hidden dark:block" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="5"></circle>
+              <line x1="12" y1="1" x2="12" y2="3"></line>
+              <line x1="12" y1="21" x2="12" y2="23"></line>
+              <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+              <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+              <line x1="1" y1="12" x2="3" y2="12"></line>
+              <line x1="21" y1="12" x2="23" y2="12"></line>
+              <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+              <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+            </svg>
+            <svg id="themeToggleMoon" class="w-[22px] h-[22px] sm:w-6 sm:h-6 block dark:hidden" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+            </svg>
+          </button>
+          <a href="https://github.com/lalankumar17/photo-editor" target="_blank" rel="noopener noreferrer" class="p-1.5 sm:p-2 text-gray-700 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors focus:outline-none flex items-center justify-center">
+            <svg class="w-[22px] h-[22px] sm:w-6 sm:h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <path fill-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" clip-rule="evenodd" />
+            </svg>
+          </a>
+        </div>
+      </div>
+    </nav>
+
+  <!-- Beta Banner -->
+  <div class="hidden sm:block text-white py-1 px-4 font-medium text-center text-sm sm:text-base shadow-md" style="background-color: #c17c43;">
+    <marquee behavior="scroll" direction="left" scrollamount="5">
+      This site is currently in beta. If you encounter any issues, please use the feedback form below to report them. Thank you!
+    </marquee>
+  </div>
+
+  <!-- Main -->
+  <main class="container mx-auto px-2 sm:px-6 lg:px-8 py-8 sm:py-12">
+    <div class="relative bg-white dark:bg-gray-800/60 dark:backdrop-blur-md border border-gray-300 dark:border-gray-600 rounded-2xl shadow-md dark:shadow-md p-4 sm:p-8 max-w-3xl mx-auto">
+      
+      <!-- Main Title (as requested) -->
+      <div class="text-center mb-10">
+        <h1 class="text-[clamp(12px,4vw,1.875rem)] sm:text-3xl font-serif font-bold text-gray-900 dark:text-white tracking-tight leading-snug whitespace-nowrap sm:whitespace-normal">
+          Create perfect <span class="italic" style="color: #c17c43;">passport photos</span> in seconds
+        </h1>
+      </div>
+
+      <!-- API Key Section -->
+      <div class="mb-8">
+        <div class="flex items-center gap-2 mb-4">
+          <svg class="w-5 h-5 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"></path>
+          </svg>
+          <span class="text-sm font-bold text-gray-700 dark:text-gray-300 tracking-widest uppercase">REMOVE.BG API KEY</span>
+          <div class="flex-grow border-t border-gray-300 dark:border-gray-700 ml-4"></div>
+        </div>
+        <div class="relative">
+          <input type="password" id="removeBgKey" placeholder="Paste your remove.bg API key here..." class="w-full bg-white dark:bg-gray-900/50 border border-gray-300 dark:border-gray-600 rounded-lg py-3 px-4 text-gray-800 dark:text-gray-200 focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500 pr-12 transition-colors" />
+          <button type="button" id="toggleKeyBtn" class="absolute inset-y-0 right-0 px-4 flex items-center text-gray-400 hover:text-gray-200 focus:outline-none">
+            <svg id="eyeIconOpen" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+            <svg id="eyeIconClosed" class="w-5 h-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21" /></svg>
+          </button>
+        </div>
+        <p class="text-xs text-gray-600 dark:text-gray-400 mt-3">Your key is sent directly to the server for this request and never stored. <a href="https://www.remove.bg/api" target="_blank" class="text-orange-600 dark:text-orange-400 hover:text-orange-700 dark:hover:text-orange-300 font-medium">Get a free API key &rarr;</a></p>
+      </div>
+
+      <!-- Upload Section -->
+      <div class="flex items-center gap-2 mb-6 mt-8">
+        <svg class="w-5 h-5 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+        </svg>
+        <span class="text-sm font-bold text-gray-700 dark:text-gray-300 tracking-widest uppercase">UPLOAD PHOTOS</span>
+        <div class="flex-grow border-t border-gray-300 dark:border-gray-700 ml-4"></div>
+      </div>
+
+      <!-- Drop Zone -->
+      <div id="dropZone" class="border-2 border-dashed border-gray-300 dark:border-gray-600 hover:border-blue-500 dark:hover:border-blue-400 bg-transparent dark:bg-gray-900/50 rounded-xl p-8 cursor-pointer transition-all text-center">
+        <input type="file" id="imageInput" class="hidden" accept="image/*" multiple />
+        <div class="flex flex-col items-center">
+          <svg class="w-14 h-14 text-gray-500 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-4-4V7a4 4 0 014-4h10a4 4 0 014 4v5a4 4 0 01-4 4h-2m-6 4h6m-3-4v4"/>
+          </svg>
+          <p class="text-lg font-semibold">Drag & Drop or Click to Upload</p>
+          <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">Multiple photos supported • JPG, PNG, WEBP</p>
+        </div>
+      </div>
+
+      <!-- Photo Cards List -->
+      <div id="photoList" class="mt-6 space-y-3"></div>
+
+      <!-- Add More Button (shown after first upload) -->
+      <div id="addMoreWrapper" class="hidden mt-3 text-center">
+        <button id="addMoreBtn" class="text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 text-sm border border-blue-200 dark:border-blue-400/40 rounded-lg px-4 py-2 transition-all hover:bg-blue-50 dark:hover:bg-blue-400/10">
+          + Add More Photos
+        </button>
+      </div>
+
+      <!-- Background Color Selector -->
+      <div class="mt-6 rounded-xl p-5 bg-gray-100/80 dark:bg-[#0f141e]/60 border border-gray-200 dark:border-white/10">
+        <!-- Header row -->
+        <div class="flex items-center justify-between mb-4">
+          <div class="flex items-center gap-2">
+            <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01"/></svg>
+            <span class="text-sm font-semibold text-slate-800 dark:text-slate-200 tracking-wide">Background Color</span>
+          </div>
+          <!-- Live preview badge -->
+          <div class="flex items-center gap-2 px-3 py-1.5 rounded-full bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10">
+            <div id="bgPreviewBox" style="width:14px;height:14px;border-radius:50%;background:#ffffff;border:1px solid rgba(0,0,0,0.25);flex-shrink:0;"></div>
+            <span id="bgColorLabel" class="text-xs text-slate-700 dark:text-slate-400 font-mono tracking-widest font-bold">#ffffff</span>
+          </div>
+        </div>
+        <!-- Chips row -->
+        <div class="flex items-center gap-3 flex-wrap">
+          <!-- White chip -->
+          <div class="color-chip selected" id="swatch-white" onclick="selectBg('white','#ffffff')">
+            <div class="chip-dot" style="background:#ffffff;"></div>
+            <span class="chip-label">White</span>
+          </div>
+          <!-- Blue chip -->
+          <div class="color-chip" id="swatch-blue" onclick="selectBg('blue','#4A90D9')">
+            <div class="chip-dot" style="background:#4A90D9;"></div>
+            <span class="chip-label">Blue</span>
+          </div>
+
+          <!-- Custom chip -->
+          <label class="color-chip" id="swatch-custom" style="cursor:pointer;position:relative;">
+            <div class="chip-dot" style="background:conic-gradient(red,yellow,lime,cyan,blue,magenta,red);"></div>
+            <span class="chip-label">Custom</span>
+            <input type="color" id="customBgColor" style="position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;" value="#ffffff" oninput="selectBg('custom', this.value)">
+          </label>
+        </div>
+      </div>
+
+      <!-- Advanced Options -->
+      <div class="mt-8 space-y-4">
+        <div class="text-center">
+          <button id="toggleAdvanced" class="text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 transition-all text-sm font-medium">Advanced Options</button>
+        </div>
+        <div id="advancedOptions" class="hidden bg-gray-50/80 dark:bg-gray-900/50 p-6 rounded-lg border border-gray-200 dark:border-gray-700">
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-left">
+            <div>
+              <label class="block mb-1 text-sm font-medium">Width (px)</label>
+              <input type="number" id="width" value="390" class="w-full bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-800 dark:text-gray-200 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"/>
+            </div>
+            <div>
+              <label class="block mb-1 text-sm font-medium">Height (px)</label>
+              <input type="number" id="height" value="480" class="w-full bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-800 dark:text-gray-200 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"/>
+            </div>
+            <div>
+              <label class="block mb-1 text-sm font-medium">Spacing (px)</label>
+              <input type="number" id="spacing" value="10" class="w-full bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-800 dark:text-gray-200 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"/>
+            </div>
+            <div>
+              <label class="block mb-1 text-sm font-medium">Border (px)</label>
+              <input type="number" id="border" value="2" class="w-full bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-800 dark:text-gray-200 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"/>
+            </div>
+          </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
+          <button id="generateBtn" class="w-full sm:w-auto bg-blue-600 text-white font-bold py-3 px-8 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed">
+            Generate Sheet
+          </button>
+          <button id="downloadBtn" class="w-full sm:w-auto bg-green-500 text-white font-bold py-3 px-8 rounded-lg hidden">
+            <svg class="w-5 h-5 inline-block mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+            Download PDF
+          </button>
+        </div>
+        <div id="loading" class="hidden text-blue-600 dark:text-blue-400 font-semibold text-center">Processing images... please wait</div>
+      </div>
+
+      <embed id="pdfPreview" type="application/pdf" class="w-full h-[500px] mt-6 hidden rounded-lg"/>
+    </div>
+  </main>
+
+  <!-- ═══════════════════════ FOOTER ═══════════════════════════════════════ -->
+  <footer class="bg-white dark:bg-[#161b22] text-gray-500 dark:text-[#8b949e] border-t border-gray-300 dark:border-[#21262d]">
+      <div class="container mx-auto px-6 py-5 md:py-6">
+          <div class="flex flex-col md:grid md:grid-cols-3 items-center gap-y-3 md:gap-y-0">
+              <div class="hidden md:block"></div>
+              <p class="text-[13px] md:text-sm text-center w-full md:w-auto text-gray-700 dark:text-[#25D366]">&copy; 2026 Lalan Kumar. All rights reserved.</p>
+              <div class="flex items-center space-x-4 justify-end md:mr-24">
+                  <a href="https://www.linkedin.com/in/lalan-mahato" target="_blank"
+                     class="text-gray-500 dark:text-[#8b949e] hover:text-black dark:hover:text-white transition-colors duration-200">
+                      <i class="ri-linkedin-fill text-2xl"></i>
+                  </a>
+                  <a href="https://github.com/lalankumar17" target="_blank"
+                     class="text-gray-500 dark:text-[#8b949e] hover:text-black dark:hover:text-white transition-colors duration-200">
+                      <i class="ri-github-fill text-2xl"></i>
+                  </a>
+              </div>
+          </div>
+      </div>
+  </footer>
+
+  <!-- Cropper Modal -->
+  <div id="cropperModal" class="cropper-modal-overlay hidden">
+    <div class="cropper-modal-box">
+      <h3 class="text-lg font-bold mb-3 flex-shrink-0">Crop Photo</h3>
+      <div class="cropper-image-area">
+        <img id="cropModalImage" src="" style="max-width:100%; display:block;"/>
+      </div>
+      <div class="flex gap-3 mt-4 justify-end flex-shrink-0">
+        <button id="cancelCropBtn" class="bg-gray-200 dark:bg-gray-600 hover:bg-gray-300 dark:hover:bg-gray-500 text-gray-800 dark:text-white py-2 px-5 rounded-lg transition-all">Cancel</button>
+        <button id="confirmCropBtn" class="bg-blue-600 hover:bg-blue-700 text-white py-2 px-5 rounded-lg transition-all">Crop & Save</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Feedback Button -->
+  <button id="feedbackBtn" class="fixed bottom-5 right-5 w-11 h-11 sm:w-[52px] sm:h-[52px] flex items-center justify-center rounded-full shadow-xl transition-all hover:scale-110 bg-slate-600 dark:bg-[#2d3139] border border-slate-500 dark:border-white/10 text-white"
+    style="box-shadow: 0 4px 24px rgba(0,0,0,0.15);">
+    <svg class="w-[22px] h-[22px] sm:w-[24px] sm:h-[24px]" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/>
+    </svg>
+  </button>
+
+  <!-- Feedback Modal -->
+  <div id="feedbackModal" class="fixed inset-0 bg-black/50 dark:bg-black/70 flex items-center justify-center p-4 z-20 hidden">
+    <div class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl shadow-2xl p-8 max-w-md w-full relative text-gray-900 dark:text-white">
+      <button id="closeModal" class="absolute top-4 right-4 text-gray-400 hover:text-gray-900 dark:hover:text-white text-2xl">&times;</button>
+      <h2 class="text-2xl font-bold mb-4">Feedback / Bug Report</h2>
+      <form id="contact-form" class="space-y-4">
+        <!-- Using a placeholder access key for Web3Forms since none was provided -->
+        <input type="hidden" name="access_key" value="82dbc4d8-8592-4b45-9bb1-1e736ef4c1c6">
+        <input type="text" name="name" placeholder="Your Name" required class="w-full bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-800 dark:text-gray-200 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"/>
+        <input type="email" name="email" placeholder="Your Email" required class="w-full bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-800 dark:text-gray-200 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"/>
+        <select name="type" required class="w-full bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-gray-200 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-500 [color-scheme:light] dark:[color-scheme:dark]">
+          <option value="" disabled selected hidden class="text-gray-500 dark:text-gray-400">Select Feedback Type</option>
+          <option value="Bug Report" class="bg-white text-gray-900 dark:bg-gray-700 dark:text-gray-200">Bug Report</option>
+          <option value="Feature Request" class="bg-white text-gray-900 dark:bg-gray-700 dark:text-gray-200">Feature Request</option>
+          <option value="Question" class="bg-white text-gray-900 dark:bg-gray-700 dark:text-gray-200">Question / Other</option>
+        </select>
+        <textarea name="message" placeholder="Describe your issue or suggestion..." required rows="4" class="w-full bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-800 dark:text-gray-200 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
+        <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg transition-all">Submit</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Notification -->
+  <div id="notification" class="fixed bottom-1/2 left-0 right-0 mx-auto w-[85%] sm:w-auto sm:mx-0 sm:left-auto sm:right-5 sm:max-w-sm text-white py-3 px-4 rounded-lg shadow-lg transform translate-x-[120%] transition-transform duration-500 z-50">
+    <p id="notification-message" class="text-sm sm:text-base font-medium break-words text-center sm:text-left"></p>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+  <script>
+
+
+    
+    // ---- Theme Toggle ----
+    const themeBtn = document.getElementById('themeToggle');
+    const htmlEl = document.documentElement;
+    // check local storage
+    if (localStorage.theme === 'light') { htmlEl.classList.remove('dark'); }
+    else { htmlEl.classList.add('dark'); }
+
+    themeBtn.addEventListener('click', () => {
+      htmlEl.classList.toggle('dark');
+      if (htmlEl.classList.contains('dark')) {
+        localStorage.setItem('theme', 'dark');
+      } else {
+        localStorage.setItem('theme', 'light');
+      }
+    });
+
+    
+    particlesJS('particles-js', {
+      particles: {
+        number: { value: 80, density: { enable: true, value_area: 800 } },
+        color: { value: "#4a5568" }, shape: { type: "circle" },
+        opacity: { value: 0.5, random: true }, size: { value: 3, random: true },
+        line_linked: { enable: true, distance: 150, color: "#718096", opacity: 0.4, width: 1 },
+        move: { enable: true, speed: 2, direction: "none", random: false, straight: false, out_mode: "out" }
+      },
+      interactivity: {
+        detect_on: "canvas",
+        events: { onhover: { enable: true, mode: "repulse" }, onclick: { enable: true, mode: "push" } },
+        modes: { repulse: { distance: 100 }, push: { particles_nb: 4 } }
+      },
+      retina_detect: true
+    });
+
+    // ---- State ----
+    // photos: Array of { id, originalFile, croppedFile, previewUrl, copies }
+    let photos = [];
+    let nextId = 0;
+    
+    // Background color selection
+    window.selectedBgColor = '#ffffff';
+
+    function selectBg(type, color) {
+      window.selectedBgColor = color;
+      
+      // Update preview badge
+      document.getElementById('bgPreviewBox').style.background = color;
+      document.getElementById('bgColorLabel').textContent = color.toLowerCase();
+      
+      // Reset all chips
+      document.querySelectorAll('.color-chip').forEach(el => el.classList.remove('selected'));
+      
+      // Highlight selected chip
+      const selectedChip = document.getElementById('swatch-' + type);
+      if (selectedChip) selectedChip.classList.add('selected');
+    }
+
+    // Cropper modal state
+    let activeCropper = null;
+    let pendingCropId = null;
+
+    // DOM refs
+    const dropZone = document.getElementById('dropZone');
+    const imageInput = document.getElementById('imageInput');
+    const photoList = document.getElementById('photoList');
+    const addMoreWrapper = document.getElementById('addMoreWrapper');
+    const addMoreBtn = document.getElementById('addMoreBtn');
+    const generateBtn = document.getElementById('generateBtn');
+    const downloadBtn = document.getElementById('downloadBtn');
+    const pdfPreview = document.getElementById('pdfPreview');
+    const loading = document.getElementById('loading');
+    const toggleAdvanced = document.getElementById('toggleAdvanced');
+    const advancedOptions = document.getElementById('advancedOptions');
+    const cropperModal = document.getElementById('cropperModal');
+    const cropModalImage = document.getElementById('cropModalImage');
+    const confirmCropBtn = document.getElementById('confirmCropBtn');
+    const cancelCropBtn = document.getElementById('cancelCropBtn');
+    const notification = document.getElementById('notification');
+    const notifMsg = document.getElementById('notification-message');
+    const feedbackBtn = document.getElementById('feedbackBtn');
+    const feedbackModal = document.getElementById('feedbackModal');
+    const closeModal = document.getElementById('closeModal');
+    const contactForm = document.getElementById('contact-form');
+
+    // ---- Notifications ----
+    function showNotification(msg, isError = true) {
+      notifMsg.textContent = msg;
+      notification.classList.remove('bg-red-500', 'bg-green-500');
+      notification.classList.add(isError ? 'bg-red-500' : 'bg-green-500');
+      notification.classList.remove('translate-x-[120%]');
+      notification.classList.add('translate-x-0');
+      setTimeout(() => {
+        notification.classList.remove('translate-x-0');
+        notification.classList.add('translate-x-[120%]');
+      }, 3000);
+    }
+
+    // ---- Render Photo Cards ----
+    function renderPhotoList() {
+      photoList.innerHTML = '';
+      photos.forEach(photo => {
+        const card = document.createElement('div');
+        card.className = 'photo-card flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4 bg-white dark:bg-gray-900/60 border border-gray-200 dark:border-gray-700 rounded-xl p-4 shadow-sm dark:shadow-none';
+        card.innerHTML = `
+          <div class="flex items-center gap-4 flex-1 min-w-0">
+            <img src="${photo.previewUrl}" class="w-16 h-20 object-cover rounded-lg border border-gray-200 dark:border-gray-600 flex-shrink-0" />
+            <div class="flex-1 min-w-0">
+              <p class="text-sm font-medium text-gray-900 dark:text-gray-200 truncate">${photo.originalFile.name}</p>
+              <p class="text-xs text-gray-500 mt-0.5">${photo.croppedFile ? '✅ Cropped' : '⚠️ Not cropped'}</p>
+            </div>
+          </div>
+          <div class="flex items-center gap-2 sm:gap-3 w-full sm:w-auto justify-end pt-3 sm:pt-0 border-t sm:border-0 border-gray-100 dark:border-gray-800 flex-nowrap">
+            <div class="flex items-center gap-1 sm:gap-2">
+              <label class="hidden sm:block text-xs text-gray-600 dark:text-gray-400">Copies</label>
+              <input type="number" value="${photo.copies}" min="1" max="54"
+                class="bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-gray-200 rounded-lg w-16 p-1.5 text-center text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                data-id="${photo.id}" />
+            </div>
+            <button class="crop-btn text-xs bg-blue-100 hover:bg-blue-200 text-blue-600 dark:bg-blue-500/20 dark:hover:bg-blue-500/40 dark:text-blue-300 border border-blue-200 dark:border-blue-500/30 px-3 py-2 rounded-lg transition-all" data-id="${photo.id}">Crop</button>
+            <button class="remove-btn text-xs bg-red-100 hover:bg-red-200 text-red-600 dark:bg-red-500/20 dark:hover:bg-red-500/40 dark:text-red-400 border border-red-200 dark:border-red-500/30 px-3 py-2 rounded-lg transition-all" data-id="${photo.id}">Remove</button>
+          </div>
+        `;
+        photoList.appendChild(card);
+      });
+
+      // Bind copies inputs
+      photoList.querySelectorAll('input[type=number]').forEach(input => {
+        input.addEventListener('change', e => {
+          const id = parseInt(e.target.dataset.id);
+          const photo = photos.find(p => p.id === id);
+          if (photo) photo.copies = Math.max(1, parseInt(e.target.value) || 1);
+        });
+      });
+
+      // Bind crop buttons
+      photoList.querySelectorAll('.crop-btn').forEach(btn => {
+        btn.addEventListener('click', e => {
+          const id = parseInt(e.target.dataset.id);
+          openCropper(id);
+        });
+      });
+
+      // Bind remove buttons
+      photoList.querySelectorAll('.remove-btn').forEach(btn => {
+        btn.addEventListener('click', e => {
+          const id = parseInt(e.target.dataset.id);
+          photos = photos.filter(p => p.id !== id);
+          renderPhotoList();
+          if (photos.length === 0) addMoreWrapper.classList.add('hidden');
+        });
+      });
+
+      addMoreWrapper.classList.toggle('hidden', photos.length === 0);
+    }
+
+    // ---- Add Files ----
+    function addFiles(files) {
+      const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
+      let added = 0;
+      Array.from(files).forEach(file => {
+        if (!validTypes.includes(file.type)) return;
+        const photo = {
+          id: nextId++,
+          originalFile: file,
+          croppedFile: null,
+          previewUrl: URL.createObjectURL(file),
+          copies: 6
+        };
+        photos.push(photo);
+        added++;
+      });
+      if (added === 0) showNotification("Please upload valid image files (JPG, PNG, WEBP).");
+      renderPhotoList();
+    }
+
+    // ---- Drop Zone ----
+    dropZone.addEventListener('click', () => imageInput.click());
+    dropZone.addEventListener('dragover', e => {
+      e.preventDefault();
+      dropZone.classList.add('border-blue-400', 'bg-gray-700/50');
+    });
+    dropZone.addEventListener('dragleave', () => {
+      dropZone.classList.remove('border-blue-400', 'bg-gray-700/50');
+    });
+    dropZone.addEventListener('drop', e => {
+      e.preventDefault();
+      dropZone.classList.remove('border-blue-400', 'bg-gray-700/50');
+      addFiles(e.dataTransfer.files);
+    });
+    imageInput.addEventListener('change', () => {
+      addFiles(imageInput.files);
+      imageInput.value = '';
+    });
+    addMoreBtn.addEventListener('click', () => imageInput.click());
+
+    // ---- Cropper Modal ----
+    function openCropper(id) {
+      const photo = photos.find(p => p.id === id);
+      if (!photo) return;
+      pendingCropId = id;
+      cropModalImage.src = photo.previewUrl;
+      cropperModal.classList.remove('hidden');
+      if (activeCropper) activeCropper.destroy();
+      activeCropper = new Cropper(cropModalImage, {
+        aspectRatio: 384 / 472,
+        viewMode: 1,
+        dragMode: 'move',
+        autoCropArea: 1,
+      });
+    }
+
+    confirmCropBtn.addEventListener('click', () => {
+      if (!activeCropper || pendingCropId === null) return;
+      const canvas = activeCropper.getCroppedCanvas({ width: 400, height: 480 });
+      canvas.toBlob(blob => {
+        const photo = photos.find(p => p.id === pendingCropId);
+        if (!photo) return;
+        photo.croppedFile = new File([blob], 'cropped-' + photo.originalFile.name, { type: 'image/png' });
+        photo.previewUrl = URL.createObjectURL(blob);
+        activeCropper.destroy();
+        activeCropper = null;
+        pendingCropId = null;
+        cropperModal.classList.add('hidden');
+        renderPhotoList();
+        showNotification("Photo cropped successfully.", false);
+      }, 'image/png');
+    });
+
+    cancelCropBtn.addEventListener('click', () => {
+      if (activeCropper) { activeCropper.destroy(); activeCropper = null; }
+      pendingCropId = null;
+      cropperModal.classList.add('hidden');
+    });
+
+    // ---- Advanced Options ----
+    toggleAdvanced.addEventListener('click', () => {
+      const isHidden = advancedOptions.classList.contains('hidden');
+      advancedOptions.classList.toggle('hidden');
+      toggleAdvanced.textContent = isHidden ? 'Hide Advanced Options' : 'Advanced Options';
+    });
+
+    // ---- Generate PDF ----
+    generateBtn.addEventListener('click', () => {
+      if (photos.length === 0) {
+        showNotification("Please upload at least one photo.");
+        return;
+      }
+
+      const hasUncropped = photos.some(photo => !photo.croppedFile);
+      if (hasUncropped) {
+        showNotification("Please crop all photos before generating.", true);
+        return;
+      }
+
+      const apiKey = document.getElementById('removeBgKey').value.trim();
+      if (!apiKey) {
+        showNotification("Please enter your remove.bg API key.", true);
+        document.getElementById('removeBgKey').focus();
+        return;
+      }
+
+      const formData = new FormData();
+      photos.forEach((photo, i) => {
+        // Use cropped file if available, else original
+        formData.append(`image_${i}`, photo.croppedFile || photo.originalFile);
+        formData.append(`copies_${i}`, photo.copies);
+      });
+      formData.append('width', document.getElementById('width').value);
+      formData.append('height', document.getElementById('height').value);
+      formData.append('spacing', document.getElementById('spacing').value);
+      formData.append('border', document.getElementById('border').value);
+      formData.append('bg_color', window.selectedBgColor || '#ffffff');
+      formData.append('remove_bg_key', document.getElementById('removeBgKey').value.trim());
+
+      loading.classList.remove('hidden');
+      generateBtn.disabled = true;
+      downloadBtn.classList.add('hidden');
+      pdfPreview.classList.add('hidden');
+
+      fetch('/process', { method: 'POST', body: formData })
+        .then(async response => {
+          if (response.status === 429) { showNotification("Server Daily Quota Exceeded. Please try again later."); return null; }
+          if (response.status === 410) { showNotification("Cannot Detect Face/Background in one of the images."); return null; }
+          if (response.status === 500) { 
+             const errData = await response.json().catch(() => null);
+             showNotification(errData && errData.error ? errData.error : "Internal Error, try again later."); 
+             return null; 
+          }
+          if (!response.ok) {
+             const errData = await response.json().catch(() => null);
+             throw new Error((errData && errData.error) ? errData.error : "Processing failed.");
+          }
+          return response.blob();
+        })
+        .then(blob => {
+          if (!blob) return;
+          const url = URL.createObjectURL(blob);
+
+          // Detect mobile browsers
+          const isMobile = /Android|iPhone|iPad|iPod|Opera Mini|IEMobile|WPDesktop/i.test(navigator.userAgent);
+
+          if (isMobile) {
+            // On mobile: open PDF in new tab → device PDF viewer / Google Drive
+            window.open(url, '_blank');
+            showNotification("PDF ready! Opening viewer…", false);
+          } else {
+            // On desktop: show inline embed preview
+            pdfPreview.classList.remove('hidden');
+            pdfPreview.src = url;
+            showNotification("PDF generated successfully!", false);
+          }
+
+          downloadBtn.classList.remove('hidden');
+          downloadBtn.onclick = () => {
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = 'passport-sheet.pdf';
+            link.click();
+          };
+        })
+        .catch(err => {
+          console.error(err);
+          showNotification("Image processing failed. Try again later.");
+        })
+        .finally(() => {
+          loading.classList.add('hidden');
+          generateBtn.disabled = false;
+        });
+    });
+    
+    // ---- Toggle API Key Visibility ----
+    const removeBgKeyInput = document.getElementById('removeBgKey');
+    const toggleKeyBtn = document.getElementById('toggleKeyBtn');
+    const eyeIconOpen = document.getElementById('eyeIconOpen');
+    const eyeIconClosed = document.getElementById('eyeIconClosed');
+    
+    // Load saved API key on page load (so users don't have to re-enter it each time)
+    const savedKey = localStorage.getItem('removeBgApiKey');
+    if (savedKey) {
+      removeBgKeyInput.value = savedKey;
+    }
+
+    // Auto-save API key whenever the user types or pastes it
+    removeBgKeyInput.addEventListener('input', (e) => {
+      const val = e.target.value.trim();
+      if (val) {
+        localStorage.setItem('removeBgApiKey', val);
+      } else {
+        localStorage.removeItem('removeBgApiKey');
+      }
+    });
+    
+    toggleKeyBtn.addEventListener('click', () => {
+      if (removeBgKeyInput.type === 'password') {
+        removeBgKeyInput.type = 'text';
+        eyeIconOpen.classList.add('hidden');
+        eyeIconClosed.classList.remove('hidden');
+      } else {
+        removeBgKeyInput.type = 'password';
+        eyeIconOpen.classList.remove('hidden');
+        eyeIconClosed.classList.add('hidden');
+      }
+    });
+
+    // ---- Feedback ----
+    feedbackBtn.addEventListener('click', () => feedbackModal.classList.remove('hidden'));
+    closeModal.addEventListener('click', () => feedbackModal.classList.add('hidden'));
+    
+    contactForm.addEventListener('submit', function (event) {
+        event.preventDefault();
+
+        var form = event.target;
+        var formData = new FormData(form);
+
+        if (!formData.get('name') || !formData.get('email') || !formData.get('message')) {
+            showNotification('Please fill in all required fields');
+            return;
+        }
+
+        const btn = form.querySelector('button[type="submit"]');
+        btn.disabled = true; btn.textContent = 'Submitting...';
+
+        fetch('https://api.web3forms.com/submit', {
+            method: 'POST',
+            body: formData
+        })
+            .then(function (response) {
+                if (response.ok) {
+                    showNotification('Form Submitted Successfully!', false);
+                    form.reset();
+                    feedbackModal.classList.add('hidden');
+                } else {
+                    return response.json().then(function (data) {
+                        throw new Error(data.message || 'Form Submission Failed!');
+                    });
+                }
+            })
+            .catch(function (error) {
+                showNotification('Form Submission Failed! Error: ' + error.message);
+            })
+            .finally(() => {
+                btn.disabled = false; btn.textContent = 'Submit';
+            });
+    });
+  </script>
+</body>
+</html>

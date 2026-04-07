@@ -11,7 +11,7 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Nunito:wght@700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Passport Photo Editor</title>
@@ -27,8 +27,6 @@
       position: fixed; width: 100%; height: 100%;
       background-color: transparent; z-index: -1;
     }
-    .glow-shadow { box-shadow: 0 0 15px rgba(59,130,246,0.5), 0 0 5px rgba(59,130,246,0.3); }
-    .glow-orange { box-shadow: 0 0 15px rgba(193,124,67,0.5), 0 0 5px rgba(193,124,67,0.3); }
     .photo-card { transition: all 0.3s ease; }
     .photo-card:hover { transform: translateY(-2px); }
     .cropper-modal-overlay {
@@ -90,7 +88,7 @@
   <nav class="sticky top-0 z-50 bg-white/80 dark:bg-gray-900/80 backdrop-blur-md border-b border-gray-300 dark:border-gray-700 transition-colors shadow-sm">
     <div class="container mx-auto px-3 sm:px-6 lg:px-8 flex items-center justify-between h-16 w-full">
         <div class="flex items-center min-w-0 flex-1 mr-2">
-            <span class="truncate text-[18px] text-[#006b8f] font-medium dark:text-[#38bdf8]">Passport Photo Editor</span>
+            <a href="/" class="truncate text-[18px] text-[#006b8f] font-medium dark:text-[#38bdf8] cursor-pointer">Passport Photo Editor</a>
         </div>
         
         <div class="flex items-center gap-4 sm:gap-5 flex-shrink-0 pr-3 sm:pr-0">
@@ -110,11 +108,6 @@
               <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
             </svg>
           </button>
-          <a href="https://github.com/lalankumar17/photo-editor" target="_blank" rel="noopener noreferrer" class="p-1.5 sm:p-2 text-gray-700 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors focus:outline-none flex items-center justify-center">
-            <svg class="w-[22px] h-[22px] sm:w-6 sm:h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-              <path fill-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" clip-rule="evenodd" />
-            </svg>
-          </a>
         </div>
       </div>
     </nav>
@@ -197,21 +190,21 @@
           </div>
           <!-- Live preview badge -->
           <div class="flex items-center gap-2 px-3 py-1.5 rounded-full bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10">
-            <div id="bgPreviewBox" style="width:14px;height:14px;border-radius:50%;background:#ffffff;border:1px solid rgba(0,0,0,0.25);flex-shrink:0;"></div>
-            <span id="bgColorLabel" class="text-xs text-slate-700 dark:text-slate-400 font-mono tracking-widest font-bold">#ffffff</span>
+            <div id="bgPreviewBox" style="width:14px;height:14px;border-radius:50%;background:#4A90D9;border:1px solid rgba(0,0,0,0.25);flex-shrink:0;"></div>
+            <span id="bgColorLabel" class="text-xs text-slate-700 dark:text-slate-400 font-mono tracking-widest font-bold">#4a90d9</span>
           </div>
         </div>
         <!-- Chips row -->
         <div class="flex items-center gap-3 flex-wrap">
-          <!-- White chip -->
-          <div class="color-chip selected" id="swatch-white" onclick="selectBg('white','#ffffff')">
-            <div class="chip-dot" style="background:#ffffff;"></div>
-            <span class="chip-label">White</span>
-          </div>
           <!-- Blue chip -->
-          <div class="color-chip" id="swatch-blue" onclick="selectBg('blue','#4A90D9')">
+          <div class="color-chip selected" id="swatch-blue" onclick="selectBg('blue','#4A90D9')">
             <div class="chip-dot" style="background:#4A90D9;"></div>
             <span class="chip-label">Blue</span>
+          </div>
+          <!-- White chip -->
+          <div class="color-chip" id="swatch-white" onclick="selectBg('white','#ffffff')">
+            <div class="chip-dot" style="background:#ffffff;"></div>
+            <span class="chip-label">White</span>
           </div>
 
           <!-- Custom chip -->
@@ -379,7 +372,7 @@
     let nextId = 0;
     
     // Background color selection
-    window.selectedBgColor = '#ffffff';
+    window.selectedBgColor = '#4A90D9';
 
     function selectBg(type, color) {
       window.selectedBgColor = color;

@@ -93,7 +93,7 @@
         
         <div class="flex items-center gap-4 sm:gap-5 flex-shrink-0 pr-3 sm:pr-0">
           <button id="themeToggle" class="p-1.5 sm:p-2 text-gray-700 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors focus:outline-none flex items-center justify-center">
-            <svg id="themeToggleSun" class="w-[22px] h-[22px] sm:w-6 sm:h-6 hidden dark:block" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+            <svg class="w-[22px] h-[22px] sm:w-6 sm:h-6 hidden dark:block" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
               <circle cx="12" cy="12" r="5"></circle>
               <line x1="12" y1="1" x2="12" y2="3"></line>
               <line x1="12" y1="21" x2="12" y2="23"></line>
@@ -104,7 +104,7 @@
               <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
               <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
             </svg>
-            <svg id="themeToggleMoon" class="w-[22px] h-[22px] sm:w-6 sm:h-6 block dark:hidden" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+            <svg class="w-[22px] h-[22px] sm:w-6 sm:h-6 block dark:hidden" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
               <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
             </svg>
           </button>
@@ -131,7 +131,7 @@
       </div>
 
       <!-- API Key Section -->
-      <div class="mb-8">
+      <div id="apiKeySection" class="mb-8 {% if server_remove_bg_key_available %}hidden{% endif %}">
         <div class="flex items-center gap-2 mb-4">
           <svg class="w-5 h-5 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"></path>
@@ -146,7 +146,7 @@
             <svg id="eyeIconClosed" class="w-5 h-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21" /></svg>
           </button>
         </div>
-        <p class="text-xs text-gray-600 dark:text-gray-400 mt-3">Your key is sent directly to the server for this request and never stored. <a href="https://www.remove.bg/api" target="_blank" class="text-orange-600 dark:text-orange-400 hover:text-orange-700 dark:hover:text-orange-300 font-medium">Get a free API key &rarr;</a></p>
+        <p class="text-xs text-gray-600 dark:text-gray-400 mt-3">Your key is sent directly to the server for this request and saved only in this browser on this device. <a href="https://www.remove.bg/api" target="_blank" class="text-orange-600 dark:text-orange-400 hover:text-orange-700 dark:hover:text-orange-300 font-medium">Get a free API key &rarr;</a></p>
       </div>
 
       <!-- Upload Section -->
@@ -211,7 +211,7 @@
           <label class="color-chip" id="swatch-custom" style="cursor:pointer;position:relative;">
             <div class="chip-dot" style="background:conic-gradient(red,yellow,lime,cyan,blue,magenta,red);"></div>
             <span class="chip-label">Custom</span>
-            <input type="color" id="customBgColor" style="position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;" value="#ffffff" oninput="selectBg('custom', this.value)">
+            <input type="color" style="position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;" value="#ffffff" oninput="selectBg('custom', this.value)">
           </label>
         </div>
       </div>
@@ -330,6 +330,7 @@
 
   <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
   <script>
+    const serverRemoveBgKeyAvailable = {{ 'true' if server_remove_bg_key_available else 'false' }};
 
 
     
@@ -411,6 +412,11 @@
     const cancelCropBtn = document.getElementById('cancelCropBtn');
     const notification = document.getElementById('notification');
     const notifMsg = document.getElementById('notification-message');
+    const apiKeySection = document.getElementById('apiKeySection');
+    const removeBgKeyInput = document.getElementById('removeBgKey');
+    const toggleKeyBtn = document.getElementById('toggleKeyBtn');
+    const eyeIconOpen = document.getElementById('eyeIconOpen');
+    const eyeIconClosed = document.getElementById('eyeIconClosed');
     const feedbackBtn = document.getElementById('feedbackBtn');
     const feedbackModal = document.getElementById('feedbackModal');
     const closeModal = document.getElementById('closeModal');
@@ -428,6 +434,33 @@
         notification.classList.add('translate-x-[120%]');
       }, 3000);
     }
+
+    function isApiKeySectionVisible() {
+      return !apiKeySection.classList.contains('hidden');
+    }
+
+    function revealApiKeySection() {
+      apiKeySection.classList.remove('hidden');
+      removeBgKeyInput.focus();
+    }
+
+    if (!serverRemoveBgKeyAvailable) {
+      revealApiKeySection();
+    }
+
+    const savedKey = localStorage.getItem('removeBgApiKey');
+    if (savedKey) {
+      removeBgKeyInput.value = savedKey;
+    }
+
+    removeBgKeyInput.addEventListener('input', (e) => {
+      const value = e.target.value.trim();
+      if (value) {
+        localStorage.setItem('removeBgApiKey', value);
+      } else {
+        localStorage.removeItem('removeBgApiKey');
+      }
+    });
 
     // ---- Render Photo Cards ----
     function renderPhotoList() {
@@ -586,10 +619,10 @@
         return;
       }
 
-      const apiKey = document.getElementById('removeBgKey').value.trim();
-      if (!apiKey) {
+      const apiKey = removeBgKeyInput.value.trim();
+      if (isApiKeySectionVisible() && !apiKey) {
         showNotification("Please enter your remove.bg API key.", true);
-        document.getElementById('removeBgKey').focus();
+        removeBgKeyInput.focus();
         return;
       }
 
@@ -604,7 +637,9 @@
       formData.append('spacing', document.getElementById('spacing').value);
       formData.append('border', document.getElementById('border').value);
       formData.append('bg_color', window.selectedBgColor || '#ffffff');
-      formData.append('remove_bg_key', document.getElementById('removeBgKey').value.trim());
+      if (isApiKeySectionVisible() && apiKey) {
+        formData.append('remove_bg_key', apiKey);
+      }
 
       loading.classList.remove('hidden');
       generateBtn.disabled = true;
@@ -613,15 +648,17 @@
 
       fetch('/process', { method: 'POST', body: formData })
         .then(async response => {
-          if (response.status === 429) { showNotification("Server Daily Quota Exceeded. Please try again later."); return null; }
-          if (response.status === 410) { showNotification("Cannot Detect Face/Background in one of the images."); return null; }
-          if (response.status === 500) { 
-             const errData = await response.json().catch(() => null);
-             showNotification(errData && errData.error ? errData.error : "Internal Error, try again later."); 
-             return null; 
+          const errData = await response.clone().json().catch(() => null);
+          if (errData && errData.requires_user_api_key) {
+            revealApiKeySection();
+            showNotification(errData.error || "Built-in remove.bg quota is finished. Enter your own remove.bg API key to continue.");
+            return null;
+          }
+          if (response.status === 429) {
+            showNotification(errData && errData.error ? errData.error : "Server Daily Quota Exceeded. Please try again later.");
+            return null;
           }
           if (!response.ok) {
-             const errData = await response.json().catch(() => null);
              throw new Error((errData && errData.error) ? errData.error : "Processing failed.");
           }
           return response.blob();
@@ -654,7 +691,7 @@
         })
         .catch(err => {
           console.error(err);
-          showNotification("Image processing failed. Try again later.");
+          showNotification(err && err.message ? err.message : "Image processing failed. Try again later.");
         })
         .finally(() => {
           loading.classList.add('hidden');
@@ -663,27 +700,6 @@
     });
     
     // ---- Toggle API Key Visibility ----
-    const removeBgKeyInput = document.getElementById('removeBgKey');
-    const toggleKeyBtn = document.getElementById('toggleKeyBtn');
-    const eyeIconOpen = document.getElementById('eyeIconOpen');
-    const eyeIconClosed = document.getElementById('eyeIconClosed');
-    
-    // Load saved API key on page load (so users don't have to re-enter it each time)
-    const savedKey = localStorage.getItem('removeBgApiKey');
-    if (savedKey) {
-      removeBgKeyInput.value = savedKey;
-    }
-
-    // Auto-save API key whenever the user types or pastes it
-    removeBgKeyInput.addEventListener('input', (e) => {
-      const val = e.target.value.trim();
-      if (val) {
-        localStorage.setItem('removeBgApiKey', val);
-      } else {
-        localStorage.removeItem('removeBgApiKey');
-      }
-    });
-    
     toggleKeyBtn.addEventListener('click', () => {
       if (removeBgKeyInput.type === 'password') {
         removeBgKeyInput.type = 'text';

@@ -1,11 +1,13 @@
 import os
-from flask import Flask, request, render_template, send_file, jsonify
+from flask import Flask, request, render_template, send_file, jsonify, make_response
 from PIL import Image, ImageOps
 from io import BytesIO
 import requests
 import traceback
 
 app = Flask(__name__)
+app.config['TEMPLATES_AUTO_RELOAD'] = True
+app.jinja_env.auto_reload = True
 
 
 def load_local_env(path: str = ".env") -> None:
@@ -124,10 +126,14 @@ def get_remove_bg_error_message(resp: requests.Response) -> str:
 
 @app.route("/")
 def index():
-    return render_template(
+    resp = make_response(render_template(
         "index.html",
         server_remove_bg_key_available=bool(REMOVE_BG_KEY) and not REMOVE_BG_SERVER_KEY_DISABLED,
-    )
+    ))
+    resp.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
+    resp.headers["Pragma"] = "no-cache"
+    resp.headers["Expires"] = "0"
+    return resp
 
 
 def remove_background(image_bytes: bytes, api_key: str = None) -> bytes:

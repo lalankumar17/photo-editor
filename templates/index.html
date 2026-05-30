@@ -2129,7 +2129,7 @@
       border-right: 1px solid rgba(255,255,255,0.3) !important;
     }
 
-    /* Video Settings keeps the light workspace while preserving the taller resize controls. */
+    /* Settings mode keeps the light workspace while preserving the taller resize controls. */
     #videoEditorPanel.ve-settings-mode .ve-workspace {
       background: #ffffff !important;
       color: #1f2937 !important;
@@ -2552,7 +2552,7 @@
       border-right: 1px solid rgba(255,255,255,0.15) !important;
     }
 
-    /* Video Settings Settings Mode Dark Override */
+    /* Settings Mode Dark Override */
     html.dark #videoEditorPanel.ve-settings-mode .ve-workspace {
       background: #161b22 !important;
       color: #c9d1d9 !important;
@@ -3680,10 +3680,6 @@
           <i class="ri-image-line text-blue-500 dark:text-blue-400" aria-hidden="true"></i>
           <span>Images</span>
         </button>
-        <button type="button" id="menuVideoEditor" class="sidebar-item" title="Videos">
-          <i class="ri-video-line text-emerald-500 dark:text-emerald-400" aria-hidden="true"></i>
-          <span>Videos</span>
-        </button>
         <button type="button" id="menuMusicEditor" class="sidebar-item" title="Audio">
           <i class="ri-music-2-line text-purple-500 dark:text-purple-400" aria-hidden="true"></i>
           <span>Audio</span>
@@ -3693,11 +3689,6 @@
       <div class="sidebar-item" id="menuRecord">
         <i class="ri-record-circle-line text-rose-500 dark:text-rose-400"></i>
         <span>Record</span>
-      </div>
-
-      <div class="sidebar-item" id="menuVideoSettings">
-        <i class="ri-aspect-ratio-line text-amber-500 dark:text-amber-400"></i>
-        <span>Video Settings</span>
       </div>
 
     </aside>
@@ -3713,10 +3704,6 @@
             <i class="ri-image-line text-blue-500 dark:text-blue-400" aria-hidden="true"></i>
             <span>Images</span>
           </button>
-          <button type="button" id="tabVideoEditor" class="sidebar-item mobile-sidebar-item" title="Videos">
-            <i class="ri-video-line text-emerald-500 dark:text-emerald-400" aria-hidden="true"></i>
-            <span>Videos</span>
-          </button>
           <button type="button" id="tabMusicEditor" class="sidebar-item mobile-sidebar-item" title="Audio">
             <i class="ri-music-2-line text-purple-500 dark:text-purple-400" aria-hidden="true"></i>
             <span>Audio</span>
@@ -3724,10 +3711,6 @@
           <button type="button" id="tabRecord" class="sidebar-item mobile-sidebar-item" title="Record">
             <i class="ri-record-circle-line text-rose-500 dark:text-rose-400" aria-hidden="true"></i>
             <span>Record</span>
-          </button>
-          <button type="button" id="tabVideoSettings" class="sidebar-item mobile-sidebar-item" title="Video Settings">
-            <i class="ri-aspect-ratio-line text-amber-500 dark:text-amber-400" aria-hidden="true"></i>
-            <span>Video Settings</span>
           </button>
         </div>
       </div>
@@ -4209,7 +4192,7 @@
               <div id="meProgressFill" class="ve-progress-fill"></div>
             </div>
             <div class="flex flex-col sm:flex-row justify-center gap-3 mt-4">
-              <button id="meExportBtn" class="ve-btn ve-btn-primary w-full sm:w-[58%] justify-center">
+              <button id="meExportBtn" class="ve-btn ve-btn-primary w-full sm:w-72 justify-center">
                 Convert File
               </button>
               <button id="meResetBtn" class="ve-btn ve-btn-danger w-full sm:w-auto justify-center">Reset All</button>
@@ -4327,7 +4310,7 @@
           <!-- Post-recording actions -->
           <div id="recPostActions" class="flex flex-wrap items-center gap-3 hidden w-full justify-center">
             <button type="button" id="btnRecImport" class="ve-btn ve-btn-primary flex-1 justify-center py-3">
-              <i class="ri-video-add-line text-lg"></i> <span id="recImportLabel">Send to Video Editor</span>
+              <i class="ri-music-2-line text-lg"></i> <span id="recImportLabel">Send to Audio</span>
             </button>
             <button type="button" id="btnRecDownload" class="ve-btn ve-btn-secondary flex-1 justify-center py-3">
               <i class="ri-download-2-line text-lg"></i> Download Recording
@@ -4365,11 +4348,11 @@
 
         <!-- Bulk Upload Dropzone -->
         <div id="medDropZone" class="border-2 border-dashed border-gray-300 dark:border-gray-600 hover:border-blue-500 dark:hover:border-blue-400 bg-gray-50/50 dark:bg-gray-900/30 rounded-xl p-4 cursor-pointer transition-all text-center mb-4">
-          <input type="file" id="medFileInput" class="hidden" accept="image/*,video/*,audio/*" multiple />
+          <input type="file" id="medFileInput" class="hidden" accept="image/*,audio/*" multiple />
           <div class="flex flex-col items-center">
             <i class="ri-upload-cloud-2-line text-3xl text-gray-400 mb-1"></i>
             <p class="text-base font-semibold text-gray-700 dark:text-gray-200">Drag &amp; Drop Assets or Click to Browse</p>
-            <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Upload multiple photos, videos, or audio tracks at once</p>
+            <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Upload multiple photos or audio tracks at once</p>
           </div>
         </div>
 
@@ -5201,16 +5184,12 @@
     const menuImages     = document.getElementById('menuImages');
     const menuRecord     = document.getElementById('menuRecord');
     const menuMedia      = document.getElementById('menuMedia');
-    const menuVideoSettings = document.getElementById('menuVideoSettings');
-    const menuVideoEditor= document.getElementById('menuVideoEditor');
     const menuMusicEditor= document.getElementById('menuMusicEditor');
     const mediaCategoryButtons = document.querySelectorAll('[data-media-filter]');
     
     const tabImages      = document.getElementById('tabImages');
     const tabRecord      = document.getElementById('tabRecord');
     const tabMedia       = document.getElementById('tabMedia');
-    const tabVideoSettings = document.getElementById('tabVideoSettings');
-    const tabVideoEditor = document.getElementById('tabVideoEditor');
     const tabMusicEditor = document.getElementById('tabMusicEditor');
 
     // Workspace panels
@@ -5261,7 +5240,7 @@
     }
 
     function deactivateAllTabs() {
-      [menuImages, menuRecord, menuMedia, menuVideoSettings, menuVideoEditor, menuMusicEditor].forEach(item => {
+      [menuImages, menuRecord, menuMedia, menuMusicEditor].forEach(item => {
         if (item) item.classList.remove('active');
       });
       if (mobileMediaBtn) mobileMediaBtn.classList.remove('active');
@@ -5273,8 +5252,6 @@
       setMobileTabActive(tabImages, false);
       setMobileTabActive(tabRecord, false);
       setMobileTabActive(tabMedia, false);
-      setMobileTabActive(tabVideoSettings, false);
-      setMobileTabActive(tabVideoEditor, false);
       setMobileTabActive(tabMusicEditor, false);
     }
 
@@ -5298,10 +5275,8 @@
       vePanel.classList.add('open');
       applyCurrentResizeToStage();
       deactivateAllTabs();
-      if (menuVideoEditor) menuVideoEditor.classList.add('active');
       const videoBtn = document.querySelector('[data-media-filter="video"]');
       if (videoBtn) videoBtn.classList.add('active');
-      setMobileTabActive(tabVideoEditor, true);
     }
 
     function showMusicEditor() {
@@ -5354,9 +5329,6 @@
       vePanel.classList.remove('hidden');
       vePanel.classList.add('open');
       deactivateAllTabs();
-      if (menuVideoSettings) menuVideoSettings.classList.add('active');
-      setMobileTabActive(tabVideoSettings, true);
-
       if (veStageFrame) {
         veStageFrame.style.setProperty('border', '0px', 'important');
         // If no background has been set yet (still transparent), default to black
@@ -5391,15 +5363,11 @@
     mediaCategoryButtons.forEach(button => {
       button.addEventListener('click', () => setMediaCategoryFilter(button.dataset.mediaFilter));
     });
-    if (menuVideoSettings) menuVideoSettings.addEventListener('click', showVideoSettings);
-    if (menuVideoEditor) menuVideoEditor.addEventListener('click', showVideoEditor);
     if (menuMusicEditor) menuMusicEditor.addEventListener('click', showMusicEditor);
 
     if (tabImages) tabImages.addEventListener('click', showHome);
     if (tabRecord) tabRecord.addEventListener('click', showRecordPanel);
     if (tabMedia) tabMedia.addEventListener('click', () => setMediaCategoryFilter('all'));
-    if (tabVideoSettings) tabVideoSettings.addEventListener('click', showVideoSettings);
-    if (tabVideoEditor) tabVideoEditor.addEventListener('click', showVideoEditor);
     if (tabMusicEditor) tabMusicEditor.addEventListener('click', showMusicEditor);
     if (veCloseBtn) veCloseBtn.addEventListener('click', showHome);
     if (meCloseBtn) meCloseBtn.addEventListener('click', showHome);
@@ -7627,8 +7595,11 @@
         recStatusTxt.textContent = 'READY';
         btnStartRec.classList.remove('hidden');
         btnResetRec.classList.remove('hidden');
+        if (btnRecImport) {
+          btnRecImport.classList.toggle('hidden', recSourceType !== 'audio');
+        }
         if (recImportLabel) {
-          recImportLabel.textContent = recSourceType === 'audio' ? 'Send to Music Editor' : 'Send to Video Editor';
+          recImportLabel.textContent = 'Send to Audio';
         }
 
         showNotification("Capture devices initialized successfully!", false);
@@ -7770,6 +7741,9 @@
         btnStopRec.classList.add('hidden');
         btnResetRec.classList.add('hidden');
         recPostActions.classList.remove('hidden');
+        if (btnRecImport) {
+          btnRecImport.classList.toggle('hidden', recLastKind !== 'audio');
+        }
 
         showNotification("Recording stopped. Review your clip below!", false);
       };
@@ -7845,6 +7819,7 @@
 
     btnRecImport.addEventListener('click', () => {
       if (!recLastBlob && recRecordedChunks.length === 0) return;
+      if (recLastKind !== 'audio') return;
       const blob = recLastBlob || new Blob(recRecordedChunks, { type: recLastKind === 'audio' ? 'audio/webm' : 'video/webm' });
       const file = new File(
         [blob],
@@ -7852,15 +7827,9 @@
         { type: blob.type || (recLastKind === 'audio' ? 'audio/webm' : 'video/webm') }
       );
       
-      if (recLastKind === 'audio') {
-        loadMusic(file);
-        showMusicEditor();
-        showNotification("Imported recording into Music Editor successfully!", false);
-      } else {
-        loadVideo(file);
-        showVideoEditor();
-        showNotification("Imported recording into Video Editor successfully!", false);
-      }
+      loadMusic(file);
+      showMusicEditor();
+      showNotification("Imported recording into Audio successfully!", false);
       
       // Reset recorder
       stopAndResetAll();
@@ -8026,18 +7995,15 @@
         const type = file.type;
         const ext = file.name.split('.').pop().toLowerCase();
         const audioExtensions = ['mp3', 'wav', 'm4a', 'aac', 'ogg', 'flac', 'wma', 'mpga', 'weba'];
-        const videoExtensions = ['mp4', 'webm', 'mov', 'avi', 'mkv', 'flv', 'wmv', '3gp'];
         const imageExtensions = ['jpg', 'jpeg', 'png', 'gif', 'webp', 'svg', 'bmp', 'tiff'];
 
         let category = 'image';
         if (audioExtensions.includes(ext) || type.startsWith('audio/')) {
           category = 'audio';
-        } else if (videoExtensions.includes(ext) || type.startsWith('video/')) {
-          category = 'video';
         } else if (imageExtensions.includes(ext) || type.startsWith('image/')) {
           category = 'image';
         } else {
-          showNotification(`File type "${file.name}" is unsupported.`);
+          showNotification(`"${file.name}" is unsupported. Upload an image or audio file.`);
           continue;
         }
 
@@ -8082,7 +8048,7 @@
     function renderMediaLibraryGrid() {
       mediaLibraryGrid.innerHTML = '';
       const isShowingAllMedia = mediaCategoryFilter === 'all';
-      const shouldShowMediaCategory = category => isShowingAllMedia || mediaCategoryFilter === category;
+      const shouldShowMediaCategory = category => category !== 'video' && (isShowingAllMedia || mediaCategoryFilter === category);
       const visibleUserUploadedAssets = userUploadedAssets.filter(asset => shouldShowMediaCategory(asset.category));
 
       // Total count label
@@ -8099,7 +8065,7 @@
             <i class="ri-folder-open-line text-3xl text-gray-400"></i>
           </div>
           <p class="text-base font-semibold text-gray-700 dark:text-gray-300">Your library is empty</p>
-          <p class="text-xs text-gray-500 max-w-xs mt-1">Drag &amp; drop files or click browse above to upload images, videos, or audio tracks.</p>
+          <p class="text-xs text-gray-500 max-w-xs mt-1">Drag &amp; drop files or click browse above to upload images or audio tracks.</p>
         `;
         mediaLibraryGrid.appendChild(emptyState);
         return;
@@ -8116,24 +8082,8 @@
         if (asset.category === 'image') {
           visualHTML = `<img src="${asset.url}" class="w-full h-full object-cover" />`;
           buttonHTML = `
-            <button type="button" class="flex-1 py-1 text-[11px] bg-blue-100 hover:bg-blue-200 text-blue-600 dark:bg-blue-500/20 dark:text-blue-300 rounded-md font-semibold border border-blue-200 dark:border-blue-500/20 text-center" onclick="loadUserAssetToPhoto(${userUploadedAssets.indexOf(asset)})">
+            <button type="button" class="w-full py-1 text-[11px] bg-blue-100 hover:bg-blue-200 text-blue-600 dark:bg-blue-500/20 dark:text-blue-300 rounded-md font-semibold border border-blue-200 dark:border-blue-500/20 text-center" onclick="loadUserAssetToPhoto(${userUploadedAssets.indexOf(asset)})">
               Edit Photo
-            </button>
-            <button type="button" class="flex-1 py-1 text-[11px] bg-emerald-100 hover:bg-emerald-200 text-emerald-600 dark:bg-emerald-500/20 dark:text-emerald-300 rounded-md font-semibold border border-emerald-200 dark:border-emerald-500/20 text-center" onclick="loadUserAssetToVideo(${userUploadedAssets.indexOf(asset)})">
-              Use in Video
-            </button>
-          `;
-        } 
-        else if (asset.category === 'video') {
-          visualHTML = `
-            <div class="flex flex-col items-center">
-              <i class="ri-video-line text-4xl text-emerald-500"></i>
-              <span class="text-[10px] text-gray-400 uppercase tracking-widest font-mono mt-1">Video clip</span>
-            </div>
-          `;
-          buttonHTML = `
-            <button type="button" class="flex-1 py-1 text-[11px] bg-emerald-100 hover:bg-emerald-200 text-emerald-600 dark:bg-emerald-500/20 dark:text-emerald-300 rounded-md font-semibold border border-emerald-200 dark:border-emerald-500/20 text-center" onclick="loadUserAssetToVideo(${userUploadedAssets.indexOf(asset)})">
-              Edit Video
             </button>
           `;
         } 

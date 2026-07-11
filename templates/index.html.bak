@@ -78,13 +78,57 @@
     html.dark .chip-label { color: #cbd5e1; }
 
     /* ── + New Button ── */
+    .media-shortcut {
+      display: inline-flex;
+      align-items: center;
+      gap: 14px;
+      background: #fff;
+      color: #111827;
+      border: 0;
+      border-radius: 20px;
+      padding: 14px 28px 14px 20px;
+      font-size: 16px;
+      font-weight: 600;
+      box-shadow: 0 1px 2px 0 rgba(60,64,67,.3), 0 1px 3px 1px rgba(60,64,67,.15);
+      cursor: pointer;
+      transition: background-color 0.15s, box-shadow 0.15s;
+      white-space: nowrap;
+    }
+    .media-shortcut:hover,
+    .media-shortcut.active {
+      background-color: #f8f9fa;
+      box-shadow: 0 1px 3px 0 rgba(60,64,67,.3), 0 4px 8px 3px rgba(60,64,67,.15);
+    }
+    .media-shortcut i {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 24px;
+      height: 24px;
+      font-size: 20px;
+      line-height: 1;
+    }
+    html.dark .media-shortcut {
+      background: #1f1f1f;
+      color: #e3e3e3;
+      box-shadow: 0 1px 2px 0 rgba(0,0,0,.3), 0 1px 3px 1px rgba(0,0,0,.15);
+    }
+    html.dark .media-shortcut:hover,
+    html.dark .media-shortcut.active {
+      background: #282828;
+    }
+
+    .media-shortcut-wrap { display: inline-block; }
+
     /* ── Video Editor Panel ── */
-    #videoEditorPanel
+    #videoEditorPanel,
+    #musicEditorPanel {
       max-height: 0; overflow: hidden;
       transition: max-height 0.45s cubic-bezier(0.4,0,0.2,1), opacity 0.3s ease;
       opacity: 0;
     }
     #videoEditorPanel.open { max-height: none; opacity: 1; overflow: visible; }
+    #musicEditorPanel.open { max-height: none; opacity: 1; overflow: visible; }
 
     .ve-section-title {
       font-size: 0.7rem; font-weight: 700; letter-spacing: 0.1em;
@@ -149,7 +193,109 @@
     html.dark .ve-btn-secondary:hover { background: #374151; }
     .ve-btn-danger { background: #ef4444; color: #fff; }
     .ve-btn-danger:hover { background: #dc2626; }
+    @media (max-width: 640px) {
+      #meExportBtn,
+      #meResetBtn {
+        min-height: 46px;
+        justify-content: center;
+        font-size: 16px;
+        font-weight: 700;
+      }
+    }
 
+    .record-mode-shell {
+      max-width: 100%;
+      margin: 0 auto;
+      padding: 18px 0 20px;
+    }
+    .record-mode-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 16px;
+    }
+    .record-mode-card {
+      min-height: 150px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      border: 1px solid #e5e7eb;
+      border-radius: 8px;
+      background: #ffffff;
+      color: #64748b;
+      cursor: pointer;
+      box-shadow: 0 1px 2px rgba(15,23,42,0.04);
+      transition: transform 0.15s ease, border-color 0.15s ease, background-color 0.15s ease, color 0.15s ease, box-shadow 0.15s ease;
+    }
+    .record-mode-card:hover,
+    .record-mode-card:focus-visible,
+    .record-mode-card.active {
+      transform: translateY(-1px);
+      outline: none;
+      border-color: currentColor;
+      box-shadow: 0 8px 18px rgba(15,23,42,0.08);
+    }
+    .record-mode-card i {
+      font-size: 38px;
+      line-height: 1;
+    }
+    .record-mode-card span {
+      font-size: 18px;
+      font-weight: 600;
+      line-height: 1.2;
+      text-align: center;
+    }
+    .record-mode-card-audio {
+      background: #ecfdf5;
+      color: #10b981;
+    }
+    .record-mode-card-camera {
+      background: #eff6ff;
+      color: #3b9df5;
+    }
+    .record-mode-card-screen {
+      background: #f5f3ff;
+      color: #a778f3;
+    }
+    .record-mode-card-both {
+      background: #f8fafc;
+      color: #64748b;
+    }
+    .record-audio-visual {
+      background:
+        radial-gradient(circle at center, rgba(16,185,129,0.12), transparent 42%),
+        #111827;
+    }
+    #recPreviewWrap.rec-face-preview #pipRecorderPreview {
+      position: static !important;
+      width: 100% !important;
+      height: 100% !important;
+      border: 0 !important;
+      border-radius: 0 !important;
+      box-shadow: none !important;
+    }
+    #recordPanel .ve-btn-secondary {
+      border-color: #d1d5db;
+      color: #374151;
+    }
+    #recordPanel .ve-btn-secondary:hover {
+      background: #f3f4f6;
+    }
+    html.dark #recordPanel .ve-btn-secondary {
+      border-color: #4b5563 !important;
+      color: #d1d5db !important;
+    }
+    html.dark #recordPanel .ve-btn-secondary:hover {
+      background: #374151 !important;
+    }
+    @media (max-width: 820px) {
+      .record-mode-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+    @media (max-width: 520px) {
+      .record-mode-grid { grid-template-columns: 1fr; }
+      .record-mode-card { min-height: 150px; }
+    }
 
     .ve-rotate-btn {
       padding: 6px 12px; border-radius: 6px; font-size: 12px; font-weight: 500;
@@ -403,6 +549,10 @@
       .ve-timeline-zoom {
         justify-content: center;
       }
+    }
+    #meAudioPreview {
+      width: 100%;
+      display: block;
     }
 
     .ve-progress-bar {
@@ -1541,6 +1691,9 @@
       justify-content: center;
       width: 24px;
       height: 24px;
+    }
+    .sidebar-media-kinds {
+      display: contents;
     }
     .mobile-sidebar-menu {
       display: flex;
@@ -3341,6 +3494,48 @@
       border: 1.5px solid #30363d !important;
     }
 
+    /* Record Panel Dark Mode */
+    html.dark #recordPanel .bg-white {
+      background: #161b22 !important;
+      border-color: #21262d !important;
+      color: #c9d1d9 !important;
+    }
+    html.dark #recordPanel h2 {
+      color: #ffffff !important;
+    }
+    html.dark .record-mode-card {
+      background: #0d1117 !important;
+      border-color: #21262d !important;
+      color: #8b949e !important;
+    }
+    html.dark .record-mode-card:hover,
+    html.dark .record-mode-card.active {
+      border-color: #58a6ff !important;
+      color: #ffffff !important;
+      box-shadow: 0 8px 18px rgba(0,0,0,0.4) !important;
+    }
+    html.dark .record-mode-card-audio {
+      background: rgba(46,160,67,0.1) !important;
+      color: #3fdb7f !important;
+    }
+    html.dark .record-mode-card-camera {
+      background: rgba(56,139,253,0.1) !important;
+      color: #58a6ff !important;
+    }
+    html.dark .record-mode-card-screen {
+      background: rgba(187,128,255,0.1) !important;
+      color: #d3adff !important;
+    }
+    html.dark .record-mode-card-both {
+      background: #0d1117 !important;
+      color: #8b949e !important;
+    }
+    html.dark #recPreviewWrap {
+      border-color: #21262d !important;
+    }
+    html.dark #recToolbar {
+      border-top-color: #21262d !important;
+    }
     html.dark #videoEditorPanel #veTimeline,
     html.dark #videoEditorPanel #veTimeline .ve-timeline-top,
     html.dark #videoEditorPanel #veTimeline .ve-timeline-body,
@@ -3469,21 +3664,53 @@
 
   <div class="app-container">
     <!-- Desktop Sidebar -->
-    <aside class="w-64 flex-shrink-0 pt-6 pb-4 flex flex-col gap-1 select-none hidden md:flex bg-transparent border-r border-gray-200 dark:border-gray-800">
+    <aside class="w-64 flex-shrink-0 pt-6 pb-4 flex flex-col gap-1 select-none hidden md:flex bg-transparent">
+      <!-- Media Shortcut Area -->
+      <div class="px-6 mb-4">
+        <div class="media-shortcut-wrap">
+          <button id="menuMedia" class="media-shortcut" title="Media" type="button">
+            <i class="ri-upload-cloud-2-line text-blue-500 dark:text-blue-400" aria-hidden="true"></i>
+            <span>Media</span>
+          </button>
+        </div>
+      </div>
+
       <div class="sidebar-media-kinds" aria-label="Media categories">
         <button type="button" id="menuImages" class="sidebar-item" title="Images">
           <i class="ri-image-line text-blue-500 dark:text-blue-400" aria-hidden="true"></i>
           <span>Images</span>
         </button>
+        <button type="button" id="menuMusicEditor" class="sidebar-item" title="Audio">
+          <i class="ri-music-2-line text-purple-500 dark:text-purple-400" aria-hidden="true"></i>
+          <span>Audio</span>
+        </button>
       </div>
+
+      <div class="sidebar-item" id="menuRecord">
+        <i class="ri-record-circle-line text-rose-500 dark:text-rose-400"></i>
+        <span>Record</span>
+      </div>
+
     </aside>
     <main class="main-content">
       <!-- Mobile View Helpers (horizontal media menu) -->
       <div class="px-2 md:hidden">
         <div class="mobile-sidebar-menu mt-4 mb-4" aria-label="Media categories">
+          <button type="button" id="mobileMediaBtn" class="sidebar-item mobile-sidebar-item" title="Media">
+            <i class="ri-upload-cloud-2-line text-blue-500 dark:text-blue-400" aria-hidden="true"></i>
+            <span>Media</span>
+          </button>
           <button type="button" id="tabImages" class="sidebar-item mobile-sidebar-item" title="Images">
             <i class="ri-image-line text-blue-500 dark:text-blue-400" aria-hidden="true"></i>
             <span>Images</span>
+          </button>
+          <button type="button" id="tabMusicEditor" class="sidebar-item mobile-sidebar-item" title="Audio">
+            <i class="ri-music-2-line text-purple-500 dark:text-purple-400" aria-hidden="true"></i>
+            <span>Audio</span>
+          </button>
+          <button type="button" id="tabRecord" class="sidebar-item mobile-sidebar-item" title="Record">
+            <i class="ri-record-circle-line text-rose-500 dark:text-rose-400" aria-hidden="true"></i>
+            <span>Record</span>
           </button>
         </div>
       </div>
@@ -3844,6 +4071,307 @@
           <span>Edit</span>
         </button>
       </aside>
+    </div>
+  </div>
+
+
+  <div id="musicEditorPanel" class="hidden">
+    <div class="container mx-auto px-2 sm:px-6 lg:px-8 pt-6 pb-2">
+      <div class="bg-white dark:bg-gray-800/60 dark:backdrop-blur-md border border-gray-300 dark:border-gray-600 rounded-2xl shadow-md p-4 sm:p-8 max-w-5xl mx-auto">
+
+        <div class="flex items-center justify-between mb-6">
+          <div>
+            <h2 class="text-xl font-bold text-gray-900 dark:text-white">Music Editor</h2>
+            <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Preview &bull; Convert &bull; Export</p>
+          </div>
+          <button id="meCloseBtn" class="ve-btn ve-btn-secondary text-xs">Close</button>
+        </div>
+
+        <div id="meDropZone" class="ve-drop-zone">
+          <input type="file" id="meFileInput" accept="audio/*,video/*" class="hidden">
+          <i class="ri-upload-cloud-2-line mx-auto mb-3 text-5xl text-blue-500 block"></i>
+          <p class="text-sm font-semibold text-gray-700 dark:text-gray-300">Drop your audio or video file here</p>
+          <p class="text-xs text-gray-500 dark:text-gray-400 mt-2">or <span class="text-blue-500 underline cursor-pointer" id="meBrowseLink">click to browse</span></p>
+          <p class="text-xs text-gray-400 mt-4">MP3, WAV, FLAC, AAC, M4A, OGG &bull; MP4, MOV, AVI, MKV, WebM</p>
+        </div>
+
+        <div id="meUploadProgress" class="hidden py-10 text-center">
+          <div class="w-20 h-20 mx-auto mb-6 rounded-3xl bg-blue-50 dark:bg-blue-500/10 flex items-center justify-center">
+            <i class="ri-upload-cloud-2-line text-4xl text-blue-500"></i>
+          </div>
+          <p id="meUploadFileName" class="text-base font-semibold text-gray-900 dark:text-white truncate max-w-xl mx-auto"></p>
+          <p id="meUploadPercent" class="text-4xl font-extrabold text-blue-500 mt-6">21%</p>
+          <div class="w-80 max-w-full h-2.5 bg-gray-200 dark:bg-gray-700 rounded-full mx-auto mt-6 overflow-hidden">
+            <div id="meUploadBar" class="h-full bg-blue-500 rounded-full transition-all duration-200" style="width: 21%"></div>
+          </div>
+          <p class="text-sm text-gray-500 dark:text-gray-400 mt-4">Uploading...</p>
+        </div>
+
+        <div id="meControls" class="hidden mt-6 space-y-6">
+          <div>
+            <p class="ve-section-title">Preview</p>
+            <audio id="meAudioPreview" controls></audio>
+            <div class="flex gap-2 mt-3">
+              <button id="meChangeAudioBtn" class="ve-btn ve-btn-secondary text-xs">Change Audio</button>
+              <span id="meFileName" class="text-xs text-gray-400 truncate self-center"></span>
+            </div>
+          </div>
+
+          <div class="hidden">
+            <input type="range" id="meTrimStart" min="0" step="0.1" value="0">
+            <span id="meTrimStartVal">0.0s</span>
+            <input type="range" id="meTrimEnd" min="0" step="0.1" value="100">
+            <span id="meTrimEndVal">--</span>
+            <input type="range" id="meVolume" min="0" max="2" step="0.1" value="1">
+            <span id="meVolumeVal">1.0x</span>
+          </div>
+
+          <div class="space-y-8">
+            <div>
+              <div class="flex items-center gap-2 mb-5">
+                <h3 class="text-sm font-semibold text-gray-900 dark:text-white">Output Format</h3>
+              </div>
+              <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-2">
+                <button type="button" class="me-format-btn bg-blue-500 text-white" data-format="mp3">MP3</button>
+                <button type="button" class="me-format-btn" data-format="aac">AAC</button>
+                <button type="button" class="me-format-btn" data-format="m4a">M4A</button>
+                <button type="button" class="me-format-btn" data-format="opus">Opus</button>
+                <button type="button" class="me-format-btn" data-format="ogg">OGG</button>
+                <button type="button" class="me-format-btn" data-format="flac">FLAC</button>
+                <button type="button" class="me-format-btn" data-format="wav">WAV</button>
+                <button type="button" class="me-format-btn" data-format="aiff">AIFF</button>
+              </div>
+            </div>
+
+            <button type="button" id="meAdvancedToggle" class="w-full flex items-center justify-center gap-2 text-sm text-gray-600 dark:text-gray-300">
+              <span>Advanced Conversion Settings</span>
+              <i id="meAdvancedIcon" class="ri-arrow-up-s-line text-lg"></i>
+            </button>
+
+            <div id="meAdvancedSettings" class="space-y-5">
+              <div class="bg-gray-50 dark:bg-gray-900/40 rounded-xl p-5">
+                <div class="flex justify-between items-center mb-6">
+                  <h3 class="text-sm font-semibold text-gray-900 dark:text-white">Audio Settings</h3>
+                </div>
+                <p class="text-sm text-gray-700 dark:text-gray-300 mb-3">Channels</p>
+                <div class="grid grid-cols-3 gap-2 mb-5">
+                  <button type="button" class="me-option-btn active" data-setting="channels" data-value="original">Original</button>
+                  <button type="button" class="me-option-btn" data-setting="channels" data-value="mono">Mono</button>
+                  <button type="button" class="me-option-btn" data-setting="channels" data-value="stereo">Stereo</button>
+                </div>
+                <p class="text-sm text-gray-700 dark:text-gray-300 mb-3">Sample Rate</p>
+                <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-2">
+                  <button type="button" class="me-option-btn active" data-setting="sampleRate" data-value="original">Original</button>
+                  <button type="button" class="me-option-btn" data-setting="sampleRate" data-value="16000">16 kHz</button>
+                  <button type="button" class="me-option-btn" data-setting="sampleRate" data-value="24000">24 kHz</button>
+                  <button type="button" class="me-option-btn" data-setting="sampleRate" data-value="32000">32 kHz</button>
+                  <button type="button" class="me-option-btn" data-setting="sampleRate" data-value="44100">44.1 kHz</button>
+                  <button type="button" class="me-option-btn" data-setting="sampleRate" data-value="48000">48 kHz</button>
+                  <button type="button" class="me-option-btn" data-setting="sampleRate" data-value="96000">96 kHz</button>
+                </div>
+              </div>
+
+              <div class="border border-gray-200 dark:border-gray-700 rounded-xl p-5">
+                <div class="grid grid-cols-2 gap-2 mb-5">
+                  <button type="button" class="me-option-btn active" data-setting="bitrateMode" data-value="cbr">CBR</button>
+                  <button type="button" class="me-option-btn" data-setting="bitrateMode" data-value="vbr">VBR</button>
+                </div>
+                <div class="flex justify-between mb-3">
+                  <label id="meBitrateLabel" class="text-xs text-gray-700 dark:text-gray-300">Bitrate</label>
+                  <span id="meBitrateVal" class="text-xs font-medium text-blue-500">256 kbps</span>
+                </div>
+                <input type="range" id="meBitrate" class="ve-range" min="64" max="320" step="32" value="256">
+              </div>
+
+            </div>
+          </div>
+
+          <div class="pt-2">
+            <div id="meStatusMsg" class="text-xs text-gray-500 dark:text-gray-400 mb-2 hidden"></div>
+            <div id="meProgressBar" class="ve-progress-bar hidden">
+              <div id="meProgressFill" class="ve-progress-fill"></div>
+            </div>
+            <div class="flex flex-col sm:flex-row justify-center gap-3 mt-4">
+              <button id="meExportBtn" class="ve-btn ve-btn-primary w-full sm:w-72 justify-center">
+                Convert File
+              </button>
+              <button id="meResetBtn" class="ve-btn ve-btn-danger w-full sm:w-auto justify-center">Reset All</button>
+            </div>
+            <p class="text-xs text-gray-400 mt-3 text-center">Audio processing runs entirely in your browser.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ═══════════════════════ RECORD PANEL (WebRTC Recorder) ═══════════════════════ -->
+  <div id="recordPanel" class="hidden">
+    <div class="container mx-auto px-2 sm:px-6 lg:px-8 pt-3 pb-2">
+      <div class="bg-white border border-gray-200 rounded-lg shadow-md p-4 max-w-3xl mx-auto">
+        
+        <div class="flex items-center justify-between mb-3 px-1">
+          <div>
+            <h2 class="text-lg font-bold text-gray-900 flex items-center gap-2">
+              <span class="relative flex h-3 w-3">
+                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-rose-400 opacity-75"></span>
+                <span class="relative inline-flex rounded-full h-3 w-3 bg-rose-500"></span>
+              </span>
+              Record
+            </h2>
+          </div>
+          <button id="recCloseBtn" class="ve-btn ve-btn-secondary text-xs">Close</button>
+        </div>
+
+        <!-- Recorder Mode Picker -->
+        <div id="recSetupView" class="record-mode-shell">
+          <div class="record-mode-grid">
+            <button type="button" class="record-mode-card record-mode-card-audio" data-record-mode="audio" aria-label="Record audio">
+              <i class="ri-voiceprint-line"></i>
+              <span>Audio</span>
+            </button>
+            <button type="button" class="record-mode-card record-mode-card-camera" data-record-mode="camera" aria-label="Record camera">
+              <i class="ri-video-line"></i>
+              <span>Camera</span>
+            </button>
+            <button type="button" class="record-mode-card record-mode-card-screen" data-record-mode="screen" aria-label="Record screen">
+              <i class="ri-mac-line"></i>
+              <span>Screen</span>
+            </button>
+            <button type="button" class="record-mode-card record-mode-card-both" data-record-mode="both" aria-label="Record screen and camera">
+              <i class="ri-picture-in-picture-line"></i>
+              <span>Screen &amp; Camera</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Recorder Preview Screen -->
+        <div id="recPreviewWrap" class="relative bg-black rounded-lg overflow-hidden aspect-[16/8.7] w-full hidden items-center justify-center border border-gray-200 group shadow-inner">
+          
+          <!-- Live Preview Video -->
+          <video id="liveRecorderPreview" class="w-full h-full object-cover hidden" muted autoplay playsinline></video>
+          
+          <!-- Pip Screen Preview (for Camera + Screen both) -->
+          <video id="pipRecorderPreview" class="absolute bottom-4 right-4 w-1/4 aspect-video object-cover rounded-md border-2 border-blue-500 shadow-lg hidden" muted autoplay playsinline></video>
+
+          <!-- Recorded Video Review Player -->
+          <video id="recordedVideoReview" class="w-full h-full object-contain hidden" controls></video>
+          <audio id="recordedAudioReview" class="relative z-10 w-11/12 hidden" controls></audio>
+
+          <div id="recAudioOnlyOverlay" class="record-audio-visual absolute inset-0 hidden flex-col items-center justify-center p-6 text-center text-emerald-300">
+            <i class="ri-voiceprint-line text-6xl mb-3"></i>
+            <p class="text-lg font-bold text-white">Audio Capture Ready</p>
+            <p class="text-xs text-emerald-200/70 max-w-sm mt-1">Microphone input is active. Start recording when you are ready.</p>
+          </div>
+
+          <div id="recScreenOnlyOverlay" class="record-audio-visual absolute inset-0 hidden flex-col items-center justify-center p-6 text-center text-blue-300">
+            <i class="ri-screenshot-2-line text-6xl mb-3"></i>
+            <p class="text-lg font-bold text-white">Screen Capture Ready</p>
+            <p class="text-xs text-blue-200/70 max-w-sm mt-1">Live screen preview is hidden to prevent repeated mirror screens. The recording will be available after you stop.</p>
+          </div>
+
+          <!-- Starting / Default State Overlay -->
+          <div id="recDefaultOverlay" class="absolute inset-0 flex flex-col items-center justify-center p-6 text-center bg-gray-900/90 text-gray-300">
+            <i class="ri-record-circle-line text-6xl text-rose-500 mb-3 animate-pulse"></i>
+            <p class="text-lg font-bold text-white">Preparing Capture</p>
+            <p class="text-xs text-gray-400 max-w-sm mt-1 mb-4">Allow the browser permission prompt to continue.</p>
+            <button type="button" id="btnInitStream" class="ve-btn ve-btn-primary px-6 py-2.5 rounded-full shadow-lg hover:scale-105 transition-all">
+              <i class="ri-flashlight-line"></i> Try Again
+            </button>
+          </div>
+
+          <!-- Status Indicator overlay -->
+          <div id="recStatusOverlay" class="absolute top-4 left-4 bg-black/60 backdrop-blur-md px-3 py-1.5 rounded-full text-xs font-bold text-white flex items-center gap-2 border border-white/10 hidden">
+            <span class="w-2.5 h-2.5 rounded-full bg-rose-500 animate-ping"></span>
+            <span id="recStatusTxt">● STANDBY</span>
+            <span class="h-3 w-px bg-white/20"></span>
+            <span id="recTimer" class="font-mono">00:00</span>
+          </div>
+        </div>
+
+        <!-- Recorder Toolbar controls -->
+        <div id="recToolbar" class="hidden flex-wrap items-center justify-center gap-3 mt-3 pt-3 border-t border-gray-200">
+          <button type="button" id="btnStartRec" class="ve-btn bg-rose-500 hover:bg-rose-600 text-white font-bold py-2.5 px-6 rounded-lg hidden">
+            <i class="ri-record-circle-fill"></i> Start Recording
+          </button>
+          <button type="button" id="btnPauseRec" class="ve-btn bg-amber-500 hover:bg-amber-600 text-white font-bold py-2.5 px-6 rounded-lg hidden">
+            <i class="ri-pause-circle-line"></i> Pause
+          </button>
+          <button type="button" id="btnResumeRec" class="ve-btn bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-2.5 px-6 rounded-lg hidden">
+            <i class="ri-play-circle-line"></i> Resume
+          </button>
+          <button type="button" id="btnStopRec" class="ve-btn bg-gray-800 hover:bg-gray-900 dark:bg-gray-700 dark:hover:bg-gray-600 text-white font-bold py-2.5 px-6 rounded-lg hidden">
+            <i class="ri-stop-circle-line"></i> Stop Recording
+          </button>
+          <button type="button" id="btnResetRec" class="ve-btn ve-btn-danger font-bold py-2.5 px-6 rounded-lg hidden">
+            <i class="ri-refresh-line"></i> Discard &amp; Reset
+          </button>
+
+          <!-- Post-recording actions -->
+          <div id="recPostActions" class="flex flex-wrap items-center gap-3 hidden w-full justify-center">
+            <button type="button" id="btnRecImport" class="ve-btn ve-btn-primary flex-1 justify-center py-3">
+              <i class="ri-music-2-line text-lg"></i> <span id="recImportLabel">Send to Audio</span>
+            </button>
+            <button type="button" id="btnRecDownload" class="ve-btn ve-btn-secondary flex-1 justify-center py-3">
+              <i class="ri-download-2-line text-lg"></i> Download Recording
+            </button>
+            <button type="button" id="btnRecDiscard" class="ve-btn ve-btn-danger px-6 py-3">
+              Discard
+            </button>
+          </div>
+        </div>
+
+        <p class="text-[11px] text-gray-500 dark:text-gray-300 mt-2 text-center leading-relaxed">
+          Screen recording handles microphone/system loops entirely locally. No audio or video data leaves your computer.
+        </p>
+
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ═══════════════════════ MEDIA PANEL (Centralized Media Workspace) ═══════════════════════ -->
+  <div id="mediaPanel">
+    <div class="container mx-auto px-2 sm:px-6 lg:px-8 pt-3 pb-2">
+      <div class="bg-white dark:bg-gray-800/60 dark:backdrop-blur-md border border-gray-300 dark:border-gray-600 rounded-2xl shadow-md p-4 sm:p-5 max-w-6xl mx-auto">
+        
+        <div class="flex items-center justify-between mb-4">
+          <div>
+            <h2 class="text-xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
+              <i class="ri-folder-shared-line text-blue-500"></i>
+              Media Workspace
+            </h2>
+            <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Central uploads library &bull; Click any asset to load it into its corresponding editor</p>
+          </div>
+          <button id="mediaCloseBtn" class="ve-btn ve-btn-secondary text-xs">Close</button>
+        </div>
+
+        <!-- Bulk Upload Dropzone -->
+        <div id="medDropZone" class="border-2 border-dashed border-gray-300 dark:border-gray-600 hover:border-blue-500 dark:hover:border-blue-400 bg-gray-50/50 dark:bg-gray-900/30 rounded-xl p-4 cursor-pointer transition-all text-center mb-4">
+          <input type="file" id="medFileInput" class="hidden" accept="image/*,audio/*" multiple />
+          <div class="flex flex-col items-center">
+            <i class="ri-upload-cloud-2-line text-3xl text-gray-400 mb-1"></i>
+            <p class="text-base font-semibold text-gray-700 dark:text-gray-200">Drag &amp; Drop Assets or Click to Browse</p>
+            <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Upload multiple photos or audio tracks at once</p>
+          </div>
+        </div>
+
+        <!-- Gallery/Assets Grid -->
+        <div class="mb-2">
+          <div class="flex items-center justify-between mb-4 pb-2 border-b border-gray-200 dark:border-gray-700/60">
+            <h3 class="text-sm font-bold text-gray-800 dark:text-gray-200 tracking-wider uppercase flex items-center gap-2">
+              <span class="w-1.5 h-3.5 bg-blue-500 rounded-sm"></span>
+              Workspace Assets
+            </h3>
+            <span class="text-xs text-gray-500 dark:text-gray-400 font-medium" id="mediaCountLabel">0 assets loaded</span>
+          </div>
+
+          <div id="mediaLibraryGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
+            <!-- Uploaded user assets will appear here dynamically -->
+          </div>
+        </div>
+
+      </div>
     </div>
   </div>
 
@@ -4565,6 +5093,39 @@
     const exportResultDownload = document.getElementById('exportResultDownload');
     const exportResultEdit = document.getElementById('exportResultEdit');
     const veResetBtn    = document.getElementById('veResetBtn');
+    const mePanel       = document.getElementById('musicEditorPanel');
+    const meCloseBtn    = document.getElementById('meCloseBtn');
+    const meDropZone    = document.getElementById('meDropZone');
+    const meFileInput   = document.getElementById('meFileInput');
+    const meBrowseLink  = document.getElementById('meBrowseLink');
+    const meControls    = document.getElementById('meControls');
+    const meUploadProgress = document.getElementById('meUploadProgress');
+    const meUploadFileName = document.getElementById('meUploadFileName');
+    const meUploadPercent = document.getElementById('meUploadPercent');
+    const meUploadBar = document.getElementById('meUploadBar');
+    const meAudioPreview= document.getElementById('meAudioPreview');
+    const meFileName    = document.getElementById('meFileName');
+    const meChangeBtn   = document.getElementById('meChangeAudioBtn');
+    const meTrimStart   = document.getElementById('meTrimStart');
+    const meTrimEnd     = document.getElementById('meTrimEnd');
+    const meTrimStartVal= document.getElementById('meTrimStartVal');
+    const meTrimEndVal  = document.getElementById('meTrimEndVal');
+    const meVolume      = document.getElementById('meVolume');
+    const meVolumeVal   = document.getElementById('meVolumeVal');
+    const meExportBtn   = document.getElementById('meExportBtn');
+    const meResetBtn    = document.getElementById('meResetBtn');
+    const meStatusMsg   = document.getElementById('meStatusMsg');
+    const meProgressBar = document.getElementById('meProgressBar');
+    const meProgressFill= document.getElementById('meProgressFill');
+    const meFormatBtns  = document.querySelectorAll('.me-format-btn');
+    const meOptionBtns  = document.querySelectorAll('.me-option-btn');
+    const meAdvancedToggle = document.getElementById('meAdvancedToggle');
+    const meAdvancedSettings = document.getElementById('meAdvancedSettings');
+    const meAdvancedIcon = document.getElementById('meAdvancedIcon');
+    const meBitrate = document.getElementById('meBitrate');
+    const meBitrateLabel = document.getElementById('meBitrateLabel');
+    const meBitrateVal = document.getElementById('meBitrateVal');
+
     let videoFile = null;
     let videoSources = [];
     let videoSourceIdCounter = 0;
@@ -4592,21 +5153,50 @@
     let suppressTimelineSync = false;
     let cropRect = { x: 0, y: 0, w: 100, h: 100 };
     let cropDrag = null;
+    let musicFile = null;
+    let musicDuration = 0;
+    let musicUploadTimer = null;
+    let selectedMusicFormat = 'mp3';
+    let musicConversionSettings = {
+      channels: 'original',
+      sampleRate: 'original',
+      bitrateMode: 'cbr',
+      bitrate: 256,
+      vbrQuality: 2,
+      metadata: 'preserve'
+    };
+    let ffmpegInstance = null;
+    let ffmpegLoaded = false;
+    let ffmpegLoading = false;
+    let ffmpegWarmupStarted = false;
     let selectedExportSettings = { format: 'mp4', quality: '480', width: 854, height: 480 };
     let selectedResizeSettings = { name: 'YouTube', ratio: '16:9', icon: 'ri-youtube-fill', width: 1920, height: 1080 };
     let exportCancelled = false;
     let exportedResult = null;
+    let mediaCategoryFilter = 'all';
     const TIMELINE_TRACK_TOPS = [6, 80];
 
     // ── Toggle panel (Unified Workspace Navigation Logic) ──
     const mainPhotoEditor = document.getElementById('mainPhotoEditor');
+    const mobileMediaBtn = document.getElementById('mobileMediaBtn');
     
     // Navigation elements
     const menuImages     = document.getElementById('menuImages');
+    const menuRecord     = document.getElementById('menuRecord');
+    const menuMedia      = document.getElementById('menuMedia');
+    const menuMusicEditor= document.getElementById('menuMusicEditor');
+    const mediaCategoryButtons = document.querySelectorAll('[data-media-filter]');
     
     const tabImages      = document.getElementById('tabImages');
+    const tabRecord      = document.getElementById('tabRecord');
+    const tabMedia       = document.getElementById('tabMedia');
+    const tabMusicEditor = document.getElementById('tabMusicEditor');
 
     // Workspace panels
+    const recordPanel    = document.getElementById('recordPanel');
+    const mediaPanel     = document.getElementById('mediaPanel');
+    const recCloseBtn    = document.getElementById('recCloseBtn');
+    const mediaCloseBtn  = document.getElementById('mediaCloseBtn');
 
     function setMobileTabActive(tab, active) {
       if (!tab) return;
@@ -4624,6 +5214,12 @@
       mainPhotoEditor.classList.add('hidden');
       vePanel.classList.add('hidden');
       vePanel.classList.remove('open');
+      if (mePanel) {
+        mePanel.classList.add('hidden');
+        mePanel.classList.remove('open');
+      }
+      recordPanel.classList.add('hidden');
+      mediaPanel.classList.add('hidden');
 
       // Reset dynamic settings mode inline styles
       const stagePan = document.querySelector('.ve-stage-pane');
@@ -4644,8 +5240,19 @@
     }
 
     function deactivateAllTabs() {
-      if (menuImages) menuImages.classList.remove('active');
+      [menuImages, menuRecord, menuMedia, menuMusicEditor].forEach(item => {
+        if (item) item.classList.remove('active');
+      });
+      if (mobileMediaBtn) mobileMediaBtn.classList.remove('active');
+      if (mediaCategoryButtons) {
+        mediaCategoryButtons.forEach(button => {
+          button.classList.remove('active');
+        });
+      }
       setMobileTabActive(tabImages, false);
+      setMobileTabActive(tabRecord, false);
+      setMobileTabActive(tabMedia, false);
+      setMobileTabActive(tabMusicEditor, false);
     }
 
     function showHome() {
@@ -4668,11 +5275,51 @@
       vePanel.classList.add('open');
       applyCurrentResizeToStage();
       deactivateAllTabs();
+      const videoBtn = document.querySelector('[data-media-filter="video"]');
+      if (videoBtn) videoBtn.classList.add('active');
     }
 
+    function showMusicEditor() {
+      hideAllPanels();
+      mePanel.classList.remove('hidden');
+      mePanel.classList.add('open');
+      deactivateAllTabs();
+      if (menuMusicEditor) menuMusicEditor.classList.add('active');
+      const audioBtn = document.querySelector('[data-media-filter="audio"]');
+      if (audioBtn) audioBtn.classList.add('active');
+      setMobileTabActive(tabMusicEditor, true);
+    }
 
+    function showRecordPanel() {
+      hideAllPanels();
+      recordPanel.classList.remove('hidden');
+      deactivateAllTabs();
+      if (menuRecord) menuRecord.classList.add('active');
+      setMobileTabActive(tabRecord, true);
+    }
 
+    function showMediaPanel() {
+      hideAllPanels();
+      mediaPanel.classList.remove('hidden');
+      deactivateAllTabs();
+      if (menuMedia) menuMedia.classList.add('active');
+      if (mobileMediaBtn) mobileMediaBtn.classList.add('active');
+      if (mediaCategoryButtons) {
+        mediaCategoryButtons.forEach(button => {
+          button.classList.toggle('active', button.dataset.mediaFilter === mediaCategoryFilter);
+        });
+      }
+      setMobileTabActive(tabMedia, true);
+      renderMediaLibraryGrid();
+    }
 
+    function setMediaCategoryFilter(category) {
+      mediaCategoryFilter = category || 'all';
+      mediaCategoryButtons.forEach(button => {
+        button.classList.toggle('active', button.dataset.mediaFilter === mediaCategoryFilter);
+      });
+      showMediaPanel();
+    }
 
     function showVideoSettings() {
       hideAllPanels();
@@ -4708,11 +5355,24 @@
     }
 
     // Attach Click Handlers
+    if (mobileMediaBtn) mobileMediaBtn.addEventListener('click', () => setMediaCategoryFilter('all'));
 
     if (menuImages) menuImages.addEventListener('click', showHome);
+    if (menuRecord) menuRecord.addEventListener('click', showRecordPanel);
+    if (menuMedia) menuMedia.addEventListener('click', () => setMediaCategoryFilter('all'));
+    mediaCategoryButtons.forEach(button => {
+      button.addEventListener('click', () => setMediaCategoryFilter(button.dataset.mediaFilter));
+    });
+    if (menuMusicEditor) menuMusicEditor.addEventListener('click', showMusicEditor);
 
     if (tabImages) tabImages.addEventListener('click', showHome);
+    if (tabRecord) tabRecord.addEventListener('click', showRecordPanel);
+    if (tabMedia) tabMedia.addEventListener('click', () => setMediaCategoryFilter('all'));
+    if (tabMusicEditor) tabMusicEditor.addEventListener('click', showMusicEditor);
     if (veCloseBtn) veCloseBtn.addEventListener('click', showHome);
+    if (meCloseBtn) meCloseBtn.addEventListener('click', showHome);
+    if (recCloseBtn) recCloseBtn.addEventListener('click', showHome);
+    if (mediaCloseBtn) mediaCloseBtn.addEventListener('click', showHome);
 
     // ── File handling ──
     veBrowseLink.addEventListener('click', () => veFileInput.click());
@@ -4886,6 +5546,1350 @@
       });
     }
 
+    // ---- Audio file handling ----
+    meBrowseLink.addEventListener('click', e => { e.stopPropagation(); meFileInput.click(); });
+    meChangeBtn.addEventListener('click', () => meFileInput.click());
+    meDropZone.addEventListener('click', () => meFileInput.click());
+    meDropZone.addEventListener('dragover', e => { e.preventDefault(); meDropZone.classList.add('dragover'); });
+    meDropZone.addEventListener('dragleave', () => meDropZone.classList.remove('dragover'));
+    meDropZone.addEventListener('drop', e => {
+      e.preventDefault(); meDropZone.classList.remove('dragover');
+      const f = e.dataTransfer.files[0];
+      if (f) loadMusic(f);
+    });
+    meFileInput.addEventListener('change', () => {
+      if (meFileInput.files[0]) loadMusic(meFileInput.files[0]);
+    });
+
+    function setMusicUploadProgress(value) {
+      const safeValue = Math.max(1, Math.min(100, Math.round(value)));
+      if (meUploadPercent) meUploadPercent.textContent = safeValue + '%';
+      if (meUploadBar) meUploadBar.style.width = safeValue + '%';
+    }
+
+    function showMusicUploadProgress(file) {
+      if (musicUploadTimer) clearInterval(musicUploadTimer);
+      if (meUploadFileName) meUploadFileName.textContent = file.name;
+      setMusicUploadProgress(21);
+      meDropZone.classList.add('hidden');
+      meControls.classList.add('hidden');
+      if (meUploadProgress) meUploadProgress.classList.remove('hidden');
+      let progress = 21;
+      musicUploadTimer = setInterval(() => {
+        progress = Math.min(88, progress + 7);
+        setMusicUploadProgress(progress);
+      }, 160);
+    }
+
+    function hideMusicUploadProgress() {
+      if (musicUploadTimer) clearInterval(musicUploadTimer);
+      musicUploadTimer = null;
+      if (meUploadProgress) meUploadProgress.classList.add('hidden');
+    }
+
+    function finishMusicUploadProgress(callback) {
+      if (musicUploadTimer) clearInterval(musicUploadTimer);
+      musicUploadTimer = null;
+      setMusicUploadProgress(100);
+      setTimeout(() => {
+        hideMusicUploadProgress();
+        callback();
+      }, 220);
+    }
+
+    function setMusicFormat(format) {
+      selectedMusicFormat = format;
+      meFormatBtns.forEach(btn => {
+        const isActive = btn.dataset.format === format;
+        btn.classList.toggle('active', isActive);
+        btn.classList.toggle('bg-blue-500', isActive);
+        btn.classList.toggle('text-white', isActive);
+      });
+    }
+
+    function setMusicOption(setting, value) {
+      musicConversionSettings[setting] = value;
+      meOptionBtns.forEach(btn => {
+        if (btn.dataset.setting !== setting) return;
+        btn.classList.toggle('active', btn.dataset.value === value);
+      });
+      if (setting === 'bitrateMode') updateMusicBitrateUi();
+    }
+
+    function formatVbrQualityLabel(value) {
+      const estimates = {
+        0: '~245 kbps',
+        1: '~225 kbps',
+        2: '~190 kbps',
+        3: '~175 kbps',
+        4: '~165 kbps',
+        5: '~130 kbps',
+        6: '~115 kbps',
+        7: '~100 kbps',
+        8: '~85 kbps',
+        9: '~65 kbps'
+      };
+      return `V${value} (${estimates[value] || '~190 kbps'})`;
+    }
+
+    function updateMusicBitrateUi() {
+      if (!meBitrate || !meBitrateVal) return;
+      const isVbr = musicConversionSettings.bitrateMode === 'vbr';
+      if (meBitrateLabel) meBitrateLabel.textContent = isVbr ? 'Quality' : 'Bitrate';
+      if (isVbr) {
+        meBitrate.min = '0';
+        meBitrate.max = '9';
+        meBitrate.step = '1';
+        meBitrate.value = String(musicConversionSettings.vbrQuality);
+        meBitrateVal.textContent = formatVbrQualityLabel(musicConversionSettings.vbrQuality);
+      } else {
+        meBitrate.min = '64';
+        meBitrate.max = '320';
+        meBitrate.step = '32';
+        meBitrate.value = String(musicConversionSettings.bitrate);
+        meBitrateVal.textContent = musicConversionSettings.bitrate + ' kbps';
+      }
+    }
+
+    meFormatBtns.forEach(btn => {
+      btn.addEventListener('click', () => setMusicFormat(btn.dataset.format));
+    });
+    meOptionBtns.forEach(btn => {
+      btn.addEventListener('click', () => setMusicOption(btn.dataset.setting, btn.dataset.value));
+    });
+    if (meAdvancedToggle && meAdvancedSettings) {
+      meAdvancedToggle.addEventListener('click', () => {
+        const isHidden = meAdvancedSettings.classList.toggle('hidden');
+        if (meAdvancedIcon) {
+          meAdvancedIcon.classList.toggle('ri-arrow-up-s-line', !isHidden);
+          meAdvancedIcon.classList.toggle('ri-arrow-down-s-line', isHidden);
+        }
+      });
+    }
+    if (meBitrate) {
+      meBitrate.addEventListener('input', () => {
+        if (musicConversionSettings.bitrateMode === 'vbr') {
+          musicConversionSettings.vbrQuality = parseInt(meBitrate.value, 10);
+          if (meBitrateVal) meBitrateVal.textContent = formatVbrQualityLabel(musicConversionSettings.vbrQuality);
+        } else {
+          musicConversionSettings.bitrate = parseInt(meBitrate.value, 10);
+          if (meBitrateVal) meBitrateVal.textContent = musicConversionSettings.bitrate + ' kbps';
+        }
+      });
+    }
+    setMusicFormat(selectedMusicFormat);
+    updateMusicBitrateUi();
+
+    function loadMusic(file) {
+      const ext = file.name.split('.').pop().toLowerCase();
+      const audioExtensions = ['mp3', 'wav', 'm4a', 'aac', 'ogg', 'flac', 'wma', 'mpga', 'weba'];
+      const videoExtensions = ['mp4', 'mov', 'avi', 'mkv', 'webm'];
+      const isAudioExt = audioExtensions.includes(ext);
+      const isVideoExt = videoExtensions.includes(ext);
+
+      if (!file.type.startsWith('audio/') && !file.type.startsWith('video/') && !isAudioExt && !isVideoExt) {
+        showNotification('Please upload an audio or video file for the Music Editor.');
+        return;
+      }
+      showMusicUploadProgress(file);
+      musicFile = file;
+      meFileName.textContent = file.name;
+      const url = URL.createObjectURL(file);
+      meAudioPreview.src = url;
+      meAudioPreview.onloadedmetadata = () => {
+        musicDuration = meAudioPreview.duration;
+        meTrimStart.max = musicDuration;
+        meTrimEnd.max = musicDuration;
+        meTrimStart.value = 0;
+        meTrimEnd.value = musicDuration;
+        meTrimStartVal.textContent = '0.0s';
+        meTrimEndVal.textContent = musicDuration.toFixed(1) + 's';
+        finishMusicUploadProgress(() => {
+          meDropZone.classList.add('hidden');
+          meControls.classList.remove('hidden');
+        });
+      };
+      meAudioPreview.onerror = () => {
+        hideMusicUploadProgress();
+        meDropZone.classList.remove('hidden');
+        meControls.classList.add('hidden');
+        URL.revokeObjectURL(url);
+        showNotification('Could not load this media in the Music Editor.');
+      };
+    }
+
+    // ── Trim sliders ──
+    // ── Rotate buttons ──
+    // ── Mute toggle ──
+    // ── Range display updates ──
+    // ── Reset ──
+      veTrimStartVal.textContent = '0.0s'; veTrimEndVal.textContent = '—';
+    function updateVideoPreviewStyle() {
+      const opacity = parseFloat(veOpacity.value) / 100;
+      const brightness = 1 + parseFloat(veBrightness.value) / 100;
+      const contrast = 1 + parseFloat(veContrast.value) / 100;
+      const saturation = 1 + parseFloat(veSaturation.value) / 100;
+      const hue = parseFloat(veHue.value);
+      const blur = parseFloat(veBlur.value);
+      const objectFitByMode = {
+        fill: 'fill',
+        fit: 'contain',
+        crop: 'cover'
+      };
+      veVideoPreview.style.opacity = opacity;
+      veVideoPreview.style.filter = `brightness(${brightness}) contrast(${contrast}) saturate(${saturation}) hue-rotate(${hue}deg) blur(${blur}px)`;
+      veVideoPreview.style.objectFit = objectFitByMode[fitMode] || 'fill';
+      veVideoPreview.style.objectPosition = 'center center';
+      veVideoPreview.style.transform = `scaleX(${flipHorizontal ? -1 : 1}) scaleY(${flipVertical ? -1 : 1}) rotate(${rotateDeg}deg)`;
+      if (veImagePreview) {
+        veImagePreview.style.opacity = opacity;
+        veImagePreview.style.filter = veVideoPreview.style.filter;
+        veImagePreview.style.objectFit = veVideoPreview.style.objectFit;
+        veImagePreview.style.objectPosition = 'center center';
+        veImagePreview.style.transform = veVideoPreview.style.transform;
+      }
+      veStageFrame.classList.toggle('ve-crop-active', fitMode === 'crop' && !!videoFile);
+      updateCropGuide();
+    }
+
+    function resetCropRect() {
+      cropRect = { x: 0, y: 0, w: 100, h: 100 };
+      updateCropGuide();
+    }
+
+    function updateCropGuide() {
+      veCropGuide.style.left = cropRect.x + '%';
+      veCropGuide.style.top = cropRect.y + '%';
+      veCropGuide.style.width = cropRect.w + '%';
+      veCropGuide.style.height = cropRect.h + '%';
+    }
+
+    function getCropPointer(event) {
+      const rect = veStageFrame.getBoundingClientRect();
+      return {
+        x: clamp(((event.clientX - rect.left) / rect.width) * 100, 0, 100),
+        y: clamp(((event.clientY - rect.top) / rect.height) * 100, 0, 100)
+      };
+    }
+
+    function setCropRectFromDrag(event) {
+      if (!cropDrag) return;
+      const point = getCropPointer(event);
+      const dx = point.x - cropDrag.startPointer.x;
+      const dy = point.y - cropDrag.startPointer.y;
+      const start = cropDrag.startRect;
+      const min = 18;
+      let next = { ...start };
+
+      if (cropDrag.mode === 'move') {
+        next.x = clamp(start.x + dx, 0, 100 - start.w);
+        next.y = clamp(start.y + dy, 0, 100 - start.h);
+      } else {
+        if (cropDrag.mode.includes('e')) next.w = clamp(start.w + dx, min, 100 - start.x);
+        if (cropDrag.mode.includes('s')) next.h = clamp(start.h + dy, min, 100 - start.y);
+        if (cropDrag.mode.includes('w')) {
+          const right = start.x + start.w;
+          next.x = clamp(start.x + dx, 0, right - min);
+          next.w = right - next.x;
+        }
+        if (cropDrag.mode.includes('n')) {
+          const bottom = start.y + start.h;
+          next.y = clamp(start.y + dy, 0, bottom - min);
+          next.h = bottom - next.y;
+        }
+      }
+
+      cropRect = next;
+      updateCropGuide();
+    }
+
+    function formatSpeed(value) {
+      return Number(value).toFixed(2).replace(/\.00$/, '').replace(/0$/, '');
+    }
+
+    function updateRotateValue() {
+      veRotateValue.textContent = rotateDeg + '°';
+      updateVideoPreviewStyle();
+    }
+
+    function updateAdjustLabels() {
+      veOpacityVal.textContent = veOpacity.value + '%';
+      veBrightnessVal.textContent = veBrightness.value;
+      veContrastVal.textContent = veContrast.value;
+      veSaturationVal.textContent = veSaturation.value;
+      veHueVal.textContent = veHue.value;
+      veBlurVal.textContent = veBlur.value;
+      updateVideoPreviewStyle();
+    }
+
+    function updateAudioLabels() {
+      veVolumeVal.textContent = veVolume.value + '%';
+      veVideoPreview.volume = Math.min(1, Math.max(0, parseFloat(veVolume.value) / 100));
+    }
+
+    function updateSpeed(value) {
+      const speed = parseFloat(value);
+      veSpeed.value = speed;
+      veSpeedVal.textContent = formatSpeed(speed);
+      veVideoPreview.playbackRate = speed;
+      veSpeedPresets.forEach(btn => btn.classList.toggle('active', parseFloat(btn.dataset.speed) === speed));
+    }
+
+    function clamp(value, min, max) {
+      return Math.min(max, Math.max(min, value));
+    }
+
+    function formatTimelineTime(seconds, withHundredths = false) {
+      const safe = Math.max(0, Number.isFinite(seconds) ? seconds : 0);
+      const minutes = Math.floor(safe / 60);
+      const secs = Math.floor(safe % 60);
+      if (!withHundredths) return minutes + ':' + String(secs).padStart(2, '0');
+      const hundredths = Math.floor((safe - Math.floor(safe)) * 100);
+      return minutes + ':' + String(secs).padStart(2, '0') + '.' + String(hundredths).padStart(2, '0');
+    }
+
+    function getSegmentSourceStart(segment) {
+      return Number.isFinite(segment.sourceStart) ? segment.sourceStart : segment.start;
+    }
+
+    function getSegmentSourceEnd(segment) {
+      return Number.isFinite(segment.sourceEnd) ? segment.sourceEnd : segment.end;
+    }
+
+    function getSegmentDuration(segment) {
+      return Math.max(0.1, getSegmentSourceEnd(segment) - getSegmentSourceStart(segment));
+    }
+
+    function getSegmentMediaSource(segment) {
+      if (segment && segment.source) return segment.source;
+      if (segment && segment.sourceId) return videoSources.find(source => source.id === segment.sourceId) || null;
+      return videoSources[0] || (videoFile ? {
+        id: 'legacy_source',
+        file: videoFile,
+        type: videoAssetType,
+        url: veVideoPreview.currentSrc || veImagePreview.src || '',
+        duration: videoDuration,
+        thumbUrls: timelineThumbUrls
+      } : null);
+    }
+
+    function getJoinedSegmentsDuration() {
+      return videoSegments.reduce((total, segment) => total + getSegmentDuration(segment), 0);
+    }
+
+    function getTimelineDuration() {
+      if (videoSegments.length) return Math.max(0.1, getJoinedSegmentsDuration());
+      return Math.max(0.1, videoDuration || parseFloat(veTrimEnd.max) || 0.1);
+    }
+
+    function getTimelineVisualDuration() {
+      const duration = getTimelineDuration();
+      return Math.max(60, duration + 30, duration * 2);
+    }
+
+    function getSegmentTimelineStart(index) {
+      let start = 0;
+      for (let i = 0; i < index; i++) start += getSegmentDuration(videoSegments[i]);
+      return start;
+    }
+
+    function getTimelineSegmentAt(time) {
+      let cursor = 0;
+      for (let i = 0; i < videoSegments.length; i++) {
+        const segment = videoSegments[i];
+        const duration = getSegmentDuration(segment);
+        if (time <= cursor + duration || i === videoSegments.length - 1) {
+          return {
+            index: i,
+            segment,
+            timelineStart: cursor,
+            timelineEnd: cursor + duration,
+            localTime: clamp(time - cursor, 0, duration)
+          };
+        }
+        cursor += duration;
+      }
+      return null;
+    }
+
+    function getSourceTimeFromTimeline(time) {
+      const match = getTimelineSegmentAt(time);
+      if (!match) return clamp(time, 0, videoDuration || time);
+      return getSegmentSourceStart(match.segment) + match.localTime;
+    }
+
+    function getTimelineTimeFromSource(sourceTime, preferredIndex = -1) {
+      const preferred = videoSegments[preferredIndex];
+      if (preferred) {
+        const start = getSegmentSourceStart(preferred);
+        const end = getSegmentSourceEnd(preferred);
+        if (sourceTime >= start && sourceTime <= end) {
+          return getSegmentTimelineStart(preferredIndex) + clamp(sourceTime - start, 0, getSegmentDuration(preferred));
+        }
+      }
+
+      for (let i = 0; i < videoSegments.length; i++) {
+        const segment = videoSegments[i];
+        const start = getSegmentSourceStart(segment);
+        const end = getSegmentSourceEnd(segment);
+        if (sourceTime >= start && sourceTime <= end) {
+          return getSegmentTimelineStart(i) + clamp(sourceTime - start, 0, getSegmentDuration(segment));
+        }
+      }
+      return videoTimelineTime;
+    }
+
+    function getTimelineBaseWidth() {
+      const bodyWidth = veTimelineBody ? veTimelineBody.clientWidth : 720;
+      return Math.max(720, bodyWidth || 720);
+    }
+
+    function applyTimelineZoom(scrollToPlayhead = true) {
+      const width = Math.round(getTimelineBaseWidth() * timelineZoom * (getTimelineVisualDuration() / getTimelineDuration()));
+      [veRuler, veTrackZone].forEach(element => {
+        if (!element) return;
+        element.style.setProperty('width', width + 'px', 'important');
+        element.style.setProperty('min-width', width + 'px', 'important');
+      });
+      if (veZoomOutBtn) veZoomOutBtn.disabled = timelineZoom <= 0.55;
+      if (veZoomInBtn) veZoomInBtn.disabled = timelineZoom >= 4;
+      if (scrollToPlayhead) scrollTimelineToCurrentTime();
+    }
+
+    function setTimelineZoom(nextZoom, scrollToPlayhead = true) {
+      timelineZoom = clamp(nextZoom, 0.5, 4);
+      applyTimelineZoom(scrollToPlayhead);
+    }
+
+    function fitTimelineToView() {
+      timelineZoom = 1;
+      applyTimelineZoom(false);
+      if (veTimelineBody) veTimelineBody.scrollLeft = 0;
+    }
+
+    function scrollTimelineToCurrentTime() {
+      if (!veTimelineBody || !veTrackZone) return;
+      const duration = getTimelineVisualDuration();
+      const current = clamp(getCurrentTimelineTime(), 0, getTimelineDuration());
+      const targetX = (current / duration) * veTrackZone.offsetWidth;
+      const viewportCenter = veTimelineBody.clientWidth / 2;
+      veTimelineBody.scrollLeft = clamp(targetX - viewportCenter, 0, Math.max(0, veTrackZone.offsetWidth - veTimelineBody.clientWidth));
+    }
+
+    function getTimelineTimeFromPointer(event) {
+      const rect = veTrackZone.getBoundingClientRect();
+      const pct = clamp((event.clientX - rect.left) / rect.width, 0, 1);
+      return pct * getTimelineVisualDuration();
+    }
+
+    function getTimelineRulerStep(duration) {
+      if (duration <= 90) return 1;
+      if (duration <= 240) return 2;
+      if (duration <= 600) return 5;
+      return 10;
+    }
+
+    function renderTimelineRuler() {
+      const duration = getTimelineVisualDuration();
+      const tickStep = getTimelineRulerStep(duration);
+      applyTimelineZoom(false);
+      veRuler.innerHTML = '';
+      for (let time = 0; time <= duration + 0.001; time += tickStep) {
+        const pct = (time / duration) * 100;
+        const tick = document.createElement('div');
+        tick.className = 've-ruler-tick';
+        tick.style.left = pct + '%';
+        const label = document.createElement('span');
+        label.textContent = formatTimelineTime(time);
+        tick.appendChild(label);
+        veRuler.appendChild(tick);
+      }
+      veDurationTime.textContent = formatTimelineTime(getTimelineDuration(), true);
+    }
+
+    function createVideoSegment(start, end, source = null) {
+      segmentIdCounter += 1;
+      return {
+        id: 'segment_' + segmentIdCounter,
+        sourceStart: Math.max(0, start),
+        sourceEnd: Math.max(start + 0.1, end),
+        source,
+        sourceId: source ? source.id : null,
+        track: 1
+      };
+    }
+
+    function cloneTimelineSegments() {
+      return videoSegments.map(segment => ({ ...segment }));
+    }
+
+    function getTimelineStateSnapshot() {
+      return {
+        segments: cloneTimelineSegments(),
+        selectedId: selectedSegmentId,
+        time: getCurrentTimelineTime(),
+        counter: segmentIdCounter
+      };
+    }
+
+    function updateHistoryButtons() {
+      if (veUndoBtn) veUndoBtn.disabled = timelineUndoStack.length === 0;
+      if (veRedoBtn) veRedoBtn.disabled = timelineRedoStack.length === 0;
+    }
+
+    function pushTimelineHistory() {
+      timelineUndoStack.push(getTimelineStateSnapshot());
+      if (timelineUndoStack.length > 80) timelineUndoStack.shift();
+      timelineRedoStack = [];
+      updateHistoryButtons();
+    }
+
+    function restoreTimelineState(snapshot) {
+      if (!snapshot) return;
+      videoSegments = snapshot.segments.map(segment => ({ ...segment }));
+      selectedSegmentId = snapshot.selectedId;
+      segmentIdCounter = snapshot.counter || segmentIdCounter;
+      if (selectedSegmentId && !videoSegments.some(segment => segment.id === selectedSegmentId)) {
+        selectedSegmentId = videoSegments[0] ? videoSegments[0].id : null;
+      }
+      setCurrentTimelineTime(clamp(snapshot.time || 0, 0, getTimelineDuration()));
+      updateTrimTimeline({ fromInputs: false });
+      renderTimelineRuler();
+      updateHistoryButtons();
+    }
+
+    function undoTimelineChange() {
+      if (!timelineUndoStack.length) return;
+      timelineRedoStack.push(getTimelineStateSnapshot());
+      restoreTimelineState(timelineUndoStack.pop());
+    }
+
+    function redoTimelineChange() {
+      if (!timelineRedoStack.length) return;
+      timelineUndoStack.push(getTimelineStateSnapshot());
+      restoreTimelineState(timelineRedoStack.pop());
+    }
+
+    function resetVideoSegments(duration) {
+      segmentIdCounter = 0;
+      videoSegments = [createVideoSegment(0, Math.max(0.1, duration || 0.1))];
+      videoTimelineTime = 0;
+      selectedSegmentId = videoSegments[0].id;
+      timelineUndoStack = [];
+      timelineRedoStack = [];
+      updateHistoryButtons();
+      vePanel.classList.remove('ve-no-segments');
+    }
+
+    function getSelectedSegmentIndex() {
+      return videoSegments.findIndex(segment => segment.id === selectedSegmentId);
+    }
+
+    function getSelectedSegment() {
+      const index = getSelectedSegmentIndex();
+      return index >= 0 ? videoSegments[index] : null;
+    }
+
+    function setSelectedSegment(id, movePlayhead = false) {
+      if (!videoSegments.some(segment => segment.id === id)) return;
+      selectedSegmentId = id;
+      const index = getSelectedSegmentIndex();
+      if (index >= 0 && movePlayhead) setCurrentTimelineTime(getSegmentTimelineStart(index));
+      if (index >= 0 && !movePlayhead) showSegmentPreview(videoSegments[index], getCurrentTimelineTime());
+      updateTrimTimeline({ fromInputs: false });
+    }
+
+    function applyTimelineThumbsToStrip(strip, segment = null) {
+      if (!strip) return;
+      const source = getSegmentMediaSource(segment);
+      const thumbs = source && source.thumbUrls && source.thumbUrls.length ? source.thumbUrls : timelineThumbUrls;
+      strip.querySelectorAll('.ve-thumb-frame').forEach((frame, index) => {
+        const thumbUrl = thumbs[index % Math.max(1, thumbs.length)];
+        if (thumbUrl) {
+          frame.style.setProperty('background', `url("${thumbUrl}") center / cover no-repeat`, 'important');
+        } else {
+          frame.style.removeProperty('background');
+        }
+      });
+    }
+
+    function makeThumbStrip(segment = null) {
+      const strip = document.createElement('div');
+      strip.className = 've-thumb-strip';
+      for (let i = 0; i < 5; i++) {
+        const frame = document.createElement('div');
+        frame.className = 've-thumb-frame';
+        strip.appendChild(frame);
+      }
+      applyTimelineThumbsToStrip(strip, segment);
+      return strip;
+    }
+
+    function getSegmentTrack(segment) {
+      return clamp(Number.isFinite(segment.track) ? segment.track : 1, 0, TIMELINE_TRACK_TOPS.length - 1);
+    }
+
+    function getSegmentTrackTop(segment) {
+      return TIMELINE_TRACK_TOPS[getSegmentTrack(segment)] || TIMELINE_TRACK_TOPS[1];
+    }
+
+    function renderTimelineSegments(duration) {
+      if (!veSegmentsLayer) return;
+      veSegmentsLayer.querySelectorAll('.ve-segment-ghost').forEach(node => node.remove());
+
+      const selected = getSelectedSegment();
+      vePanel.classList.toggle('ve-no-segments', videoSegments.length === 0);
+      if (veDeleteSegmentBtn) veDeleteSegmentBtn.disabled = !selected;
+      if (veSplitBtn) veSplitBtn.disabled = !selected;
+      if (veMoveUpBtn) veMoveUpBtn.disabled = !selected || getSegmentTrack(selected) === 0;
+      if (veMoveDownBtn) veMoveDownBtn.disabled = !selected || getSegmentTrack(selected) === TIMELINE_TRACK_TOPS.length - 1;
+      if (veExportBtn) veExportBtn.disabled = !videoFile || videoSegments.length === 0;
+      updateHistoryButtons();
+
+      if (!selected) {
+        veTrimClip.style.left = '0%';
+        veTrimClip.style.width = '0%';
+        veTrimStartVal.textContent = '0.0s';
+        veTrimEndVal.textContent = '0.0s';
+        return;
+      }
+
+      veTrimClip.dataset.segmentId = selected.id;
+      veTrimClip.classList.add('selected');
+      const selectedStart = getSegmentTimelineStart(getSelectedSegmentIndex());
+      const selectedDuration = getSegmentDuration(selected);
+      veTrimClip.style.left = (selectedStart / duration * 100) + '%';
+      veTrimClip.style.width = (selectedDuration / duration * 100) + '%';
+      veTrimClip.style.setProperty('top', getSegmentTrackTop(selected) + 'px', 'important');
+      applyTimelineThumbsToStrip(veThumbStrip, selected);
+
+      videoSegments.forEach(segment => {
+        if (segment.id === selected.id) return;
+        const segmentIndex = videoSegments.findIndex(item => item.id === segment.id);
+        const timelineStart = getSegmentTimelineStart(segmentIndex);
+        const segmentDuration = getSegmentDuration(segment);
+        const clip = document.createElement('div');
+        clip.className = 've-trim-clip ve-segment-ghost';
+        clip.dataset.segmentId = segment.id;
+        clip.style.left = (timelineStart / duration * 100) + '%';
+        clip.style.width = (segmentDuration / duration * 100) + '%';
+        clip.style.setProperty('top', getSegmentTrackTop(segment) + 'px', 'important');
+        clip.appendChild(makeThumbStrip(segment));
+        clip.addEventListener('pointerdown', event => {
+          event.preventDefault();
+          event.stopPropagation();
+          setSelectedSegment(segment.id, true);
+        });
+        veSegmentsLayer.appendChild(clip);
+      });
+    }
+
+    function updateTrimTimeline(options = {}) {
+      const fromInputs = options.fromInputs !== false;
+      const duration = getTimelineDuration();
+      const visualDuration = getTimelineVisualDuration();
+      const selectedIndex = getSelectedSegmentIndex();
+      const selected = selectedIndex >= 0 ? videoSegments[selectedIndex] : null;
+
+      if (!selected) {
+        renderTimelineSegments(visualDuration);
+        updateTimelineClock();
+        return;
+      }
+
+      let start = getSegmentTimelineStart(selectedIndex);
+      let end = start + getSegmentDuration(selected);
+
+      if (fromInputs) {
+        const requestedStart = parseFloat(veTrimStart.value) || start;
+        const requestedEnd = parseFloat(veTrimEnd.value) || end;
+        const oldDuration = getSegmentDuration(selected);
+        const startDelta = clamp(requestedStart - start, 0, oldDuration - 0.1);
+        const newDuration = clamp(requestedEnd - start - startDelta, 0.1, oldDuration - startDelta);
+        selected.sourceStart = getSegmentSourceStart(selected) + startDelta;
+        selected.sourceEnd = selected.sourceStart + newDuration;
+        start = getSegmentTimelineStart(selectedIndex);
+        end = start + getSegmentDuration(selected);
+      }
+
+      veTrimStart.value = start;
+      veTrimEnd.value = end;
+      veTrimStart.max = duration;
+      veTrimEnd.max = duration;
+      veTrimStartVal.textContent = start.toFixed(1) + 's';
+      veTrimEndVal.textContent = end.toFixed(1) + 's';
+      renderTimelineSegments(visualDuration);
+      updateTimelineClock();
+    }
+
+    function showSegmentPreview(segment, timelineTime = getCurrentTimelineTime()) {
+      const source = getSegmentMediaSource(segment);
+      if (!source) return;
+      const segmentIndex = videoSegments.findIndex(item => item.id === segment.id);
+      const segmentStart = segmentIndex >= 0 ? getSegmentTimelineStart(segmentIndex) : 0;
+      const localTime = clamp(timelineTime - segmentStart, 0, getSegmentDuration(segment));
+      const sourceTime = getSegmentSourceStart(segment) + localTime;
+      activeVideoSourceId = source.id;
+      videoAssetType = source.type;
+
+      if (source.type === 'image') {
+        veVideoPreview.pause();
+        veVideoPreview.classList.add('hidden');
+        veVideoPreview.style.display = 'none';
+        if (veImagePreview.src !== source.url) veImagePreview.src = source.url;
+        veImagePreview.classList.remove('hidden');
+        veImagePreview.style.display = 'block';
+      } else {
+        veImagePreview.classList.add('hidden');
+        veImagePreview.style.display = 'none';
+        veVideoPreview.classList.remove('hidden');
+        veVideoPreview.style.display = 'block';
+        if (veVideoPreview.src !== source.url) veVideoPreview.src = source.url;
+        if (Number.isFinite(sourceTime) && Math.abs((veVideoPreview.currentTime || 0) - sourceTime) > 0.04) {
+          suppressTimelineSync = true;
+          try { veVideoPreview.currentTime = sourceTime; } catch (err) { console.warn(err); }
+          setTimeout(() => {
+            if (veVideoPreview.paused && !pendingVideoPlay) suppressTimelineSync = false;
+          }, 120);
+        }
+      }
+    }
+
+    function getCurrentTimelineTime() {
+      return videoAssetType === 'image' ? imageTimelineTime : videoTimelineTime;
+    }
+
+    function setCurrentTimelineTime(time) {
+      const safeTime = clamp(time, 0, getTimelineDuration());
+      imageTimelineTime = safeTime;
+      videoTimelineTime = safeTime;
+      const active = getTimelineSegmentAt(safeTime);
+      if (active) showSegmentPreview(active.segment, safeTime);
+      updateTimelineClock();
+      scrollTimelineToCurrentTime();
+    }
+
+    function updateTimelineClock() {
+      const duration = getTimelineDuration();
+      const visualDuration = getTimelineVisualDuration();
+      const current = clamp(getCurrentTimelineTime(), 0, duration);
+      const pct = current / visualDuration * 100;
+      veCurrentTime.textContent = formatTimelineTime(current, true);
+      vePlayheadTime.textContent = formatTimelineTime(current);
+      vePlayhead.style.left = pct + '%';
+      const isPaused = videoAssetType === 'image' ? !imageIsPlaying : veVideoPreview.paused;
+      vePlayIcon.className = isPaused ? 'ri-play-fill' : 'ri-pause-fill';
+      if (veFullscreenCurrent) veFullscreenCurrent.textContent = formatTimelineTime(current);
+      if (veFullscreenDuration) veFullscreenDuration.textContent = formatTimelineTime(duration);
+      if (veFullscreenProgressFill) veFullscreenProgressFill.style.width = pct + '%';
+      if (veFullscreenPlayIcon) veFullscreenPlayIcon.className = isPaused ? 'ri-play-fill' : 'ri-pause-fill';
+      if (veFullscreenPlay) veFullscreenPlay.setAttribute('aria-label', isPaused ? 'Play' : 'Pause');
+    }
+
+    function setTrimHandleTime(mode, time) {
+      const selectedIndex = getSelectedSegmentIndex();
+      const selected = getSelectedSegment();
+      if (!selected || selectedIndex < 0) return;
+      const currentStart = getSegmentTimelineStart(selectedIndex);
+      const currentEnd = currentStart + getSegmentDuration(selected);
+      if (mode === 'start') {
+        veTrimStart.value = clamp(time, currentStart, currentEnd - 0.1);
+        setCurrentTimelineTime(parseFloat(veTrimStart.value));
+      }
+      if (mode === 'end') {
+        veTrimEnd.value = clamp(time, currentStart + 0.1, currentEnd);
+        setCurrentTimelineTime(parseFloat(veTrimEnd.value));
+      }
+      updateTrimTimeline();
+    }
+
+    function splitSelectedSegment() {
+      if (!videoFile) return;
+      const time = getCurrentTimelineTime();
+      const edgeTolerance = 0.12;
+      const selectedIndex = getSelectedSegmentIndex();
+      const selected = selectedIndex >= 0 ? videoSegments[selectedIndex] : null;
+      const selectedStart = selected ? getSegmentTimelineStart(selectedIndex) : 0;
+      const selectedEnd = selected ? selectedStart + getSegmentDuration(selected) : 0;
+      const selectedContainsTime = selected && time >= selectedStart - edgeTolerance && time <= selectedEnd + edgeTolerance;
+      const match = selectedContainsTime ? { index: selectedIndex } : getTimelineSegmentAt(time);
+      let index = match ? match.index : selectedIndex;
+      const segment = index >= 0 ? videoSegments[index] : null;
+      const segmentStart = index >= 0 ? getSegmentTimelineStart(index) : 0;
+      const segmentDuration = segment ? getSegmentDuration(segment) : 0;
+      let localTime = time - segmentStart;
+      if (!segment || segmentDuration <= edgeTolerance * 2) {
+        showNotification('Move the playhead inside a clip before splitting.');
+        return;
+      }
+      localTime = clamp(localTime, edgeTolerance, segmentDuration - edgeTolerance);
+      const splitTimelineTime = segmentStart + localTime;
+
+      const splitSourceTime = getSegmentSourceStart(segment) + localTime;
+      const segmentSource = getSegmentMediaSource(segment);
+      const left = createVideoSegment(getSegmentSourceStart(segment), splitSourceTime, segmentSource);
+      const right = createVideoSegment(splitSourceTime, getSegmentSourceEnd(segment), segmentSource);
+      left.track = segment.track;
+      right.track = segment.track;
+      pushTimelineHistory();
+      videoSegments.splice(index, 1, left, right);
+      selectedSegmentId = right.id;
+      setCurrentTimelineTime(splitTimelineTime);
+      updateTrimTimeline({ fromInputs: false });
+      renderTimelineRuler();
+      showNotification('Clip split at ' + formatTimelineTime(splitTimelineTime, true) + '.', false);
+    }
+
+    function deleteSelectedSegment() {
+      const index = getSelectedSegmentIndex();
+      if (index < 0) {
+        showNotification('Select a clip segment to delete.');
+        return;
+      }
+
+      const removed = videoSegments[index];
+      pushTimelineHistory();
+      videoSegments.splice(index, 1);
+      if (videoSegments.length) {
+        const nextIndex = Math.min(index, videoSegments.length - 1);
+        const next = videoSegments[nextIndex];
+        selectedSegmentId = next.id;
+        setCurrentTimelineTime(clamp(getSegmentTimelineStart(nextIndex), 0, getTimelineDuration()));
+      } else {
+        selectedSegmentId = null;
+        if (videoAssetType === 'image') imageIsPlaying = false;
+        else veVideoPreview.pause();
+        veExportBtn.disabled = true;
+        setCurrentTimelineTime(0);
+      }
+      updateTrimTimeline({ fromInputs: false });
+      renderTimelineRuler();
+      showNotification('Selected clip deleted from the timeline.', false);
+    }
+
+    function moveSelectedSegment(direction) {
+      const segment = getSelectedSegment();
+      if (!segment) {
+        showNotification('Select a split clip first.');
+        return;
+      }
+
+      const currentTrack = getSegmentTrack(segment);
+      const nextTrack = clamp(currentTrack + direction, 0, TIMELINE_TRACK_TOPS.length - 1);
+      if (nextTrack === currentTrack) return;
+
+      pushTimelineHistory();
+      segment.track = nextTrack;
+      updateTrimTimeline({ fromInputs: false });
+      showNotification(nextTrack === 0 ? 'Clip moved up.' : 'Clip moved down.', false);
+    }
+
+    function syncVideoTimelineFromPreview() {
+      if (suppressTimelineSync) {
+        updateTimelineClock();
+        return;
+      }
+      if (videoAssetType === 'image' || !videoFile || !videoSegments.length) {
+        updateTimelineClock();
+        return;
+      }
+
+      const active = getTimelineSegmentAt(videoTimelineTime) || getTimelineSegmentAt(0);
+      if (!active) {
+        updateTimelineClock();
+        return;
+      }
+
+      const sourceTime = veVideoPreview.currentTime || 0;
+      const sourceEnd = getSegmentSourceEnd(active.segment);
+      if (sourceTime >= sourceEnd - 0.035) {
+        const nextTimelineTime = active.timelineEnd;
+        if (nextTimelineTime >= getTimelineDuration() - 0.035) {
+          videoTimelineTime = getTimelineDuration();
+          veVideoPreview.pause();
+          updateTimelineClock();
+          return;
+        }
+        const wasPlaying = !veVideoPreview.paused;
+        setCurrentTimelineTime(nextTimelineTime);
+        if (wasPlaying && videoAssetType !== 'image') {
+          const playPromise = veVideoPreview.play();
+          if (playPromise && typeof playPromise.catch === 'function') playPromise.catch(() => {});
+        }
+      } else {
+        videoTimelineTime = clamp(
+          active.timelineStart + Math.max(0, sourceTime - getSegmentSourceStart(active.segment)),
+          0,
+          getTimelineDuration()
+        );
+      }
+      updateTimelineClock();
+      if (!veVideoPreview.paused) scrollTimelineToCurrentTime();
+    }
+
+    function completePendingVideoPlay() {
+      if (!pendingVideoPlay || videoAssetType === 'image' || !videoFile) return;
+      pendingVideoPlay = false;
+      const playPromise = veVideoPreview.play();
+      if (playPromise && typeof playPromise.catch === 'function') {
+        playPromise.catch(err => {
+          console.error(err);
+          updateTimelineClock();
+          showNotification('Could not start playback. Click play again.');
+        });
+      }
+      updateTimelineClock();
+      scrollTimelineToCurrentTime();
+    }
+
+    function startVideoPlaybackFromTimeline() {
+      if (!videoFile || videoAssetType === 'image') return;
+      if (!videoSegments.length) {
+        showNotification('Add a clip to the timeline before playing.');
+        return;
+      }
+      suppressTimelineSync = false;
+
+      if (videoTimelineTime >= getTimelineDuration() - 0.03) {
+        videoTimelineTime = 0;
+      }
+
+      const sourceTime = getSourceTimeFromTimeline(videoTimelineTime);
+      const needsSeek = Math.abs((veVideoPreview.currentTime || 0) - sourceTime) > 0.035;
+      pendingVideoPlay = true;
+
+      if (needsSeek) {
+        veVideoPreview.currentTime = sourceTime;
+        return;
+      }
+
+      completePendingVideoPlay();
+    }
+
+    function pauseVideoPlayback() {
+      pendingVideoPlay = false;
+      veVideoPreview.pause();
+      syncVideoTimelineFromPreview();
+    }
+
+    function stopTimelinePlayback() {
+      pendingVideoPlay = false;
+      imageIsPlaying = false;
+      suppressTimelineSync = true;
+      if (veVideoPreview && !veVideoPreview.paused) veVideoPreview.pause();
+      updateTimelineClock();
+      setTimeout(() => {
+        if (veVideoPreview.paused && !pendingVideoPlay && !imageIsPlaying) suppressTimelineSync = false;
+      }, 180);
+    }
+
+    function toggleEditorFullscreen() {
+      if (!document.fullscreenElement) {
+        vePanel.requestFullscreen().catch(err => {
+          console.error(err);
+          showNotification('Fullscreen is not available in this browser.');
+        });
+        return;
+      }
+      document.exitFullscreen().catch(err => {
+        console.error(err);
+        showNotification('Could not exit fullscreen.');
+      });
+    }
+
+    veTrimClip.addEventListener('pointerdown', event => {
+      if (event.target.classList.contains('ve-trim-handle')) return;
+      event.stopPropagation();
+      if (veTrimClip.dataset.segmentId) setSelectedSegment(veTrimClip.dataset.segmentId, false);
+    });
+    if (veSplitBtn) {
+      veSplitBtn.addEventListener('click', () => {
+        splitSelectedSegment();
+        veSplitBtn.blur();
+      });
+    }
+    if (veMoveUpBtn) veMoveUpBtn.addEventListener('click', () => moveSelectedSegment(-1));
+    if (veMoveDownBtn) veMoveDownBtn.addEventListener('click', () => moveSelectedSegment(1));
+    if (veDeleteSegmentBtn) veDeleteSegmentBtn.addEventListener('click', deleteSelectedSegment);
+    if (veUndoBtn) veUndoBtn.addEventListener('click', undoTimelineChange);
+    if (veRedoBtn) veRedoBtn.addEventListener('click', redoTimelineChange);
+    if (veZoomOutBtn) {
+      veZoomOutBtn.addEventListener('click', () => setTimelineZoom(timelineZoom / 1.25));
+    }
+    if (veZoomInBtn) {
+      veZoomInBtn.addEventListener('click', () => setTimelineZoom(timelineZoom * 1.25));
+    }
+    if (veFitTimelineBtn) {
+      veFitTimelineBtn.addEventListener('click', fitTimelineToView);
+    }
+    if (veFullscreenBtn) {
+      veFullscreenBtn.addEventListener('click', toggleEditorFullscreen);
+    }
+    if (veFullscreenExit) veFullscreenExit.addEventListener('click', toggleEditorFullscreen);
+    if (veFullscreenPlay) veFullscreenPlay.addEventListener('click', () => vePlayToggle.click());
+    if (veFullscreenProgress) {
+      veFullscreenProgress.addEventListener('click', event => {
+        if (!videoFile) return;
+        const rect = veFullscreenProgress.getBoundingClientRect();
+        const pct = clamp((event.clientX - rect.left) / rect.width, 0, 1);
+        setCurrentTimelineTime(pct * getTimelineDuration());
+      });
+    }
+    document.addEventListener('fullscreenchange', () => {
+      const isFullscreen = document.fullscreenElement === vePanel;
+      if (veFullscreenIcon) veFullscreenIcon.className = isFullscreen ? 'ri-fullscreen-exit-line' : 'ri-fullscreen-line';
+      if (veFullscreenBtn) veFullscreenBtn.classList.toggle('active', isFullscreen);
+      if (veFullscreenControls) veFullscreenControls.setAttribute('aria-hidden', isFullscreen ? 'false' : 'true');
+      updateTimelineClock();
+      setTimeout(() => applyTimelineZoom(false), 80);
+    });
+    window.addEventListener('resize', () => applyTimelineZoom(false));
+
+    vePlayToggle.addEventListener('click', () => {
+      if (!videoFile) return;
+      if (videoAssetType === 'image') {
+        if (imageIsPlaying) {
+          imageIsPlaying = false;
+        } else {
+          if (imageTimelineTime >= getTimelineDuration()) {
+            imageTimelineTime = 0;
+          }
+          imageIsPlaying = true;
+          imageLastPlayTime = performance.now();
+          requestAnimationFrame(imagePlaybackLoop);
+        }
+        updateTimelineClock();
+        return;
+      }
+      if (veVideoPreview.paused) {
+        startVideoPlaybackFromTimeline();
+      }
+      else stopTimelinePlayback();
+    });
+
+    function isTypingTarget(target) {
+      if (!target) return false;
+      return !!target.closest('input, textarea, select, [contenteditable="true"]');
+    }
+
+    function shouldHandlePlaybackShortcut(event) {
+      if (!videoFile || !vePanel || vePanel.classList.contains('hidden')) return false;
+      if (isTypingTarget(event.target)) return false;
+      if (exportSettingsModal && !exportSettingsModal.classList.contains('hidden')) return false;
+      if (exportProgressOverlay && !exportProgressOverlay.classList.contains('hidden')) return false;
+      if (exportResultOverlay && !exportResultOverlay.classList.contains('hidden')) return false;
+      if ((event.key === ' ' || event.code === 'Space') && event.target.closest('button, a')) return false;
+      return event.key === ' ' || event.code === 'Space';
+    }
+
+    function shouldHandleTimelineDeleteShortcut(event) {
+      if (!videoFile || !vePanel || vePanel.classList.contains('hidden')) return false;
+      if (isTypingTarget(event.target)) return false;
+      if (exportSettingsModal && !exportSettingsModal.classList.contains('hidden')) return false;
+      if (exportProgressOverlay && !exportProgressOverlay.classList.contains('hidden')) return false;
+      if (exportResultOverlay && !exportResultOverlay.classList.contains('hidden')) return false;
+      return event.key === 'Backspace' || event.key === 'Delete';
+    }
+
+    document.addEventListener('keydown', event => {
+      if (shouldHandleTimelineDeleteShortcut(event)) {
+        event.preventDefault();
+        stopTimelinePlayback();
+        if (document.activeElement && typeof document.activeElement.blur === 'function') {
+          document.activeElement.blur();
+        }
+        deleteSelectedSegment();
+        return;
+      }
+      if (!shouldHandlePlaybackShortcut(event)) return;
+      event.preventDefault();
+      vePlayToggle.click();
+    });
+
+    function imagePlaybackLoop(now) {
+      if (!imageIsPlaying) return;
+      const dt = (now - imageLastPlayTime) / 1000;
+      imageLastPlayTime = now;
+      let nextTime = imageTimelineTime + dt;
+      if (nextTime >= getTimelineDuration()) {
+        nextTime = getTimelineDuration();
+        imageTimelineTime = nextTime;
+        imageIsPlaying = false;
+        setCurrentTimelineTime(nextTime);
+        return;
+      }
+      imageTimelineTime = nextTime;
+      setCurrentTimelineTime(nextTime);
+      requestAnimationFrame(imagePlaybackLoop);
+    }
+    vePrevFrame.addEventListener('click', () => {
+      setCurrentTimelineTime(getCurrentTimelineTime() - 0.1);
+    });
+    veNextFrame.addEventListener('click', () => {
+      setCurrentTimelineTime(getCurrentTimelineTime() + 0.1);
+    });
+    veVideoPreview.addEventListener('timeupdate', syncVideoTimelineFromPreview);
+    veVideoPreview.addEventListener('seeked', completePendingVideoPlay);
+    veVideoPreview.addEventListener('canplay', completePendingVideoPlay);
+    veVideoPreview.addEventListener('play', updateTimelineClock);
+    veVideoPreview.addEventListener('pause', () => {
+      pendingVideoPlay = false;
+      updateTimelineClock();
+    });
+    veTrackZone.addEventListener('pointerdown', e => {
+      if (!videoFile || e.target.classList.contains('ve-trim-handle')) return;
+      setCurrentTimelineTime(getTimelineTimeFromPointer(e));
+    });
+    veTrimHandles.forEach(handle => {
+      handle.addEventListener('pointerdown', e => {
+        e.preventDefault();
+        e.stopPropagation();
+        timelineDragMode = handle.dataset.handle;
+        handle.setPointerCapture(e.pointerId);
+      });
+    });
+    document.addEventListener('pointermove', e => {
+      if (!timelineDragMode) return;
+      setTrimHandleTime(timelineDragMode, getTimelineTimeFromPointer(e));
+    });
+    document.addEventListener('pointerup', () => {
+      timelineDragMode = null;
+      cropDrag = null;
+    });
+    veCropGuide.addEventListener('pointerdown', e => {
+      if (fitMode !== 'crop' || !videoFile) return;
+      e.preventDefault();
+      e.stopPropagation();
+      cropDrag = {
+        mode: e.target.dataset.cropHandle || 'move',
+        startPointer: getCropPointer(e),
+        startRect: { ...cropRect }
+      };
+      veCropGuide.setPointerCapture(e.pointerId);
+    });
+    veCropGuide.addEventListener('pointermove', e => {
+      if (!cropDrag) return;
+      setCropRectFromDrag(e);
+    });
+    veCropGuide.addEventListener('pointerup', e => {
+      cropDrag = null;
+      if (veCropGuide.hasPointerCapture(e.pointerId)) veCropGuide.releasePointerCapture(e.pointerId);
+    });
+    veTrimStart.addEventListener('input', () => {
+      const end = parseFloat(veTrimEnd.value) || getTimelineDuration();
+      veTrimStart.value = clamp(parseFloat(veTrimStart.value) || 0, 0, end - 0.1);
+      setCurrentTimelineTime(parseFloat(veTrimStart.value));
+      updateTrimTimeline();
+    });
+    veTrimEnd.addEventListener('input', () => {
+      const start = parseFloat(veTrimStart.value) || 0;
+      veTrimEnd.value = clamp(parseFloat(veTrimEnd.value) || getTimelineDuration(), start + 0.1, getTimelineDuration());
+      setCurrentTimelineTime(parseFloat(veTrimEnd.value));
+      updateTrimTimeline();
+    });
+
+    function applyCurrentResizeToStage() {
+      const isCompactVideoLayout = window.matchMedia('(max-width: 980px)').matches;
+      const frameHeight = isCompactVideoLayout ? 240 : 326;
+      const stagePan = document.querySelector('.ve-stage-pane');
+      if (stagePan) {
+        stagePan.style.setProperty('height', frameHeight + 'px', 'important');
+        stagePan.style.setProperty('border', document.documentElement.classList.contains('dark') ? '1.5px solid #4b5563' : '1.5px solid #9ca3af', 'important');
+        stagePan.style.setProperty('border-radius', '10px', 'important');
+        stagePan.style.setProperty('overflow', 'hidden', 'important');
+        stagePan.style.setProperty('background', 'var(--ve-canvas-bg, #000000)', 'important');
+        stagePan.style.setProperty('display', 'flex', 'important');
+        stagePan.style.setProperty('align-items', 'center', 'important');
+        stagePan.style.setProperty('justify-content', 'center', 'important');
+      }
+      if (veStageFrame) {
+        const [rW, rH] = selectedResizeSettings.ratio.split(':').map(Number);
+        const computedWidth = frameHeight * (rW / rH);
+        veStageFrame.style.setProperty('width', computedWidth + 'px', 'important');
+        veStageFrame.style.setProperty('height', frameHeight + 'px', 'important');
+        veStageFrame.style.setProperty('max-width', '100%', 'important');
+        veStageFrame.style.setProperty('--ve-stage-ratio', selectedResizeSettings.ratio.replace(':', ' / '));
+      }
+    }
+
+    function applyResizeOption(button) {
+      if (!button) return;
+      const name = button.dataset.resizeName || 'YouTube';
+      const ratio = button.dataset.resizeRatio || '16:9';
+      const icon = button.dataset.resizeIcon || 'ri-youtube-fill';
+      selectedResizeSettings = {
+        name,
+        ratio,
+        icon,
+        width: parseInt(button.dataset.resizeWidth || '1920', 10),
+        height: parseInt(button.dataset.resizeHeight || '1080', 10)
+      };
+      veResizeOptionBtns.forEach(option => {
+        const active = option === button;
+        option.classList.toggle('active', active);
+        option.setAttribute('aria-selected', active ? 'true' : 'false');
+      });
+      if (veResizeSelectedIcon) veResizeSelectedIcon.className = icon;
+      if (veResizeSelectedName) veResizeSelectedName.textContent = name;
+      if (veResizeSelectedRatio) veResizeSelectedRatio.textContent = `— ${ratio}`;
+      applyCurrentResizeToStage();
+    }
+
+    if (veResizeSelect && veResizeOptions) {
+      veResizeSelect.addEventListener('click', () => {
+        const isHidden = veResizeOptions.classList.toggle('hidden');
+        veResizeSelect.setAttribute('aria-expanded', isHidden ? 'false' : 'true');
+      });
+    }
+    veResizeOptionBtns.forEach(button => {
+      button.addEventListener('click', () => applyResizeOption(button));
+    });
+    applyResizeOption(document.querySelector('.ve-resize-option.active'));
+
+    function applyVideoBackground(button) {
+      if (!button || !veStageFrame) return;
+      const background = button.dataset.videoBg || '#000000';
+      veStageFrame.style.setProperty('--ve-canvas-bg', background);
+      const stagePan = document.querySelector('.ve-stage-pane');
+      if (stagePan) {
+        stagePan.style.setProperty('--ve-canvas-bg', background);
+      }
+      veBackgroundSwatches.forEach(swatch => swatch.classList.toggle('active', swatch === button));
+    }
+
+    veBackgroundSwatches.forEach(button => {
+      button.addEventListener('click', () => applyVideoBackground(button));
+    });
+    applyVideoBackground(document.querySelector('.ve-bg-swatch.active'));
+
+    veTabBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const tabName = btn.dataset.videoTab;
+        veTabBtns.forEach(tab => tab.classList.toggle('active', tab === btn));
+        veTabPanels.forEach(panel => panel.classList.toggle('active', panel.dataset.videoPanel === tabName));
+      });
+    });
+
+    veFitModeBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        fitMode = btn.dataset.fitMode;
+        veFitModeBtns.forEach(item => item.classList.toggle('active', item === btn));
+        updateVideoPreviewStyle();
+      });
+    });
+
+    veFlipHorizontal.addEventListener('click', () => {
+      flipHorizontal = !flipHorizontal;
+      veFlipHorizontal.classList.toggle('active', flipHorizontal);
+      updateVideoPreviewStyle();
+    });
+    veFlipVertical.addEventListener('click', () => {
+      flipVertical = !flipVertical;
+      veFlipVertical.classList.toggle('active', flipVertical);
+      updateVideoPreviewStyle();
+    });
+    veRotateMinus.addEventListener('click', () => {
+      rotateDeg = (rotateDeg - 90 + 360) % 360;
+      updateRotateValue();
+    });
+    veRotatePlus.addEventListener('click', () => {
+      rotateDeg = (rotateDeg + 90) % 360;
+      updateRotateValue();
+    });
+
+    [veOpacity, veBrightness, veContrast, veSaturation, veHue, veBlur].forEach(input => {
+      input.addEventListener('input', updateAdjustLabels);
+    });
+    veAdjustReset.addEventListener('click', () => {
+      veOpacity.value = 100;
+      veBrightness.value = 0;
+      veContrast.value = 0;
+      veSaturation.value = 0;
+      veHue.value = 0;
+      veBlur.value = 0;
+      updateAdjustLabels();
+    });
+    veVolume.addEventListener('input', updateAudioLabels);
+    veSpeed.addEventListener('input', () => updateSpeed(veSpeed.value));
+    veSpeedPresets.forEach(btn => {
+      btn.addEventListener('click', () => updateSpeed(btn.dataset.speed));
+    });
+
+    veResetBtn.addEventListener('click', () => {
+      vePanel.classList.remove('ve-has-video', 've-no-segments');
+      veExportBtn.disabled = true;
+      videoSources.forEach(source => { if (source.url) URL.revokeObjectURL(source.url); });
+      videoSources = []; activeVideoSourceId = null;
+      videoFile = null; videoAssetType = 'video'; videoDuration = 0; imageTimelineTime = 0; videoTimelineTime = 0; pendingVideoPlay = false; imageIsPlaying = false; rotateDeg = 0;
+      videoSegments = []; selectedSegmentId = null; segmentIdCounter = 0; timelineUndoStack = []; timelineRedoStack = []; updateHistoryButtons();
+      fitMode = 'fill'; flipHorizontal = false; flipVertical = false;
+      veVideoPreview.src = '';
+      veVideoPreview.style.opacity = '';
+      veVideoPreview.style.filter = '';
+      veVideoPreview.style.transform = '';
+      veVideoPreview.style.objectFit = '';
+      veVideoPreview.classList.remove('hidden');
+      veVideoPreview.style.display = ''; // Reset display style
+      if (veImagePreview) {
+        veImagePreview.removeAttribute('src');
+        veImagePreview.classList.add('hidden');
+        veImagePreview.style.display = 'none'; // Force hide image element
+        veImagePreview.style.opacity = '';
+        veImagePreview.style.filter = '';
+        veImagePreview.style.transform = '';
+        veImagePreview.style.objectFit = '';
+      }
+      veStageFrame.classList.remove('ve-crop-active');
+      resetCropRect();
+      veDropZone.classList.remove('hidden');
+      veControls.classList.add('hidden');
+      veFileInput.value = '';
+      veTrimStart.value = 0; veTrimEnd.value = 100;
+      veTrimStartVal.textContent = '0.0s'; veTrimEndVal.textContent = '--';
+      veFitModeBtns.forEach(btn => btn.classList.toggle('active', btn.dataset.fitMode === 'fill'));
+      veFlipHorizontal.classList.remove('active');
+      veFlipVertical.classList.remove('active');
+      veOpacity.value = 100; veBrightness.value = 0; veContrast.value = 0;
+      veSaturation.value = 0; veHue.value = 0; veBlur.value = 0;
+      veVolume.value = 100; veNoiseReduction.checked = false;
+      updateSpeed(1);
+      updateRotateValue();
+      updateAdjustLabels();
+      updateAudioLabels();
+      updateTrimTimeline({ fromInputs: false });
+      setStatus('', false);
+    });
+
+    meTrimStart.addEventListener('input', () => {
+      const v = parseFloat(meTrimStart.value);
+      if (v >= parseFloat(meTrimEnd.value)) meTrimStart.value = parseFloat(meTrimEnd.value) - 0.1;
+      meTrimStartVal.textContent = parseFloat(meTrimStart.value).toFixed(1) + 's';
+      meAudioPreview.currentTime = parseFloat(meTrimStart.value);
+    });
+    meTrimEnd.addEventListener('input', () => {
+      const v = parseFloat(meTrimEnd.value);
+      if (v <= parseFloat(meTrimStart.value)) meTrimEnd.value = parseFloat(meTrimStart.value) + 0.1;
+      meTrimEndVal.textContent = parseFloat(meTrimEnd.value).toFixed(1) + 's';
+      meAudioPreview.currentTime = parseFloat(meTrimEnd.value);
+    });
+    meVolume.addEventListener('input', () => {
+      const volume = parseFloat(meVolume.value);
+      meVolumeVal.textContent = volume.toFixed(1) + 'x';
+      meAudioPreview.volume = Math.min(1, Math.max(0, volume));
+    });
+
+    meResetBtn.addEventListener('click', () => {
+      musicFile = null; musicDuration = 0;
+      hideMusicUploadProgress();
+      meAudioPreview.src = '';
+      meDropZone.classList.remove('hidden');
+      meControls.classList.add('hidden');
+      meFileInput.value = '';
+      meTrimStart.value = 0; meTrimEnd.value = 100;
+      meTrimStartVal.textContent = '0.0s'; meTrimEndVal.textContent = '--';
+      meVolume.value = 1; meVolumeVal.textContent = '1.0x';
+      setMusicStatus('', false);
+    });
 
     function setStatus(msg, showProgress) {
     }
@@ -4906,6 +6910,16 @@
     }
     function cancelVideoExport() {
       exportCancelled = true;
+      if (ffmpegInstance && !ffmpegLoaded) {
+        try { ffmpegInstance.terminate(); } catch (err) { console.warn(err); }
+        ffmpegInstance = null;
+        ffmpegLoading = false;
+      } else if (ffmpegInstance && ffmpegLoaded) {
+        try { ffmpegInstance.terminate(); } catch (err) { console.warn(err); }
+        ffmpegInstance = null;
+        ffmpegLoaded = false;
+        ffmpegLoading = false;
+      }
       hideExportProgress();
       veExportBtn.disabled = false;
       activeProgressUpdater = setProgress;
@@ -4971,7 +6985,160 @@
       hideExportProgress();
       if (exportResultOverlay) exportResultOverlay.classList.remove('hidden');
     }
+    function setMusicStatus(msg, showProgress) {
+      meStatusMsg.textContent = msg;
+      meStatusMsg.classList.toggle('hidden', !msg);
+      meProgressBar.classList.toggle('hidden', !showProgress);
+    }
+    function setMusicProgress(pct) {
+      meProgressFill.style.width = pct + '%';
+    }
     let activeProgressUpdater = setProgress;
+
+    function getMusicExportConfig() {
+      const configs = {
+        mp3: { ext: 'mp3', mime: 'audio/mpeg', codec: 'libmp3lame' },
+        aac: { ext: 'aac', mime: 'audio/aac', codec: 'aac' },
+        m4a: { ext: 'm4a', mime: 'audio/mp4', codec: 'aac' },
+        opus: { ext: 'opus', mime: 'audio/opus', codec: 'libopus' },
+        ogg: { ext: 'ogg', mime: 'audio/ogg', codec: 'libvorbis' },
+        flac: { ext: 'flac', mime: 'audio/flac', codec: 'flac' },
+        wav: { ext: 'wav', mime: 'audio/wav', codec: 'pcm_s16le' },
+        aiff: { ext: 'aiff', mime: 'audio/aiff', codec: 'pcm_s16be' }
+      };
+      return configs[selectedMusicFormat] || configs.mp3;
+    }
+
+    function buildMusicExportArgs(inputName, outputName, startT, duration, config) {
+      const args = [
+        '-ss', startT.toFixed(2),
+        '-t', duration.toFixed(2),
+        '-i', inputName,
+        '-map', '0:a:0',
+        '-vn',
+        '-filter:a', 'volume=' + parseFloat(meVolume.value || 1).toFixed(1),
+        '-c:a', config.codec
+      ];
+      if (musicConversionSettings.channels === 'mono') args.push('-ac', '1');
+      if (musicConversionSettings.channels === 'stereo') args.push('-ac', '2');
+      if (musicConversionSettings.sampleRate !== 'original') args.push('-ar', musicConversionSettings.sampleRate);
+      if (musicConversionSettings.metadata === 'strip') args.push('-map_metadata', '-1');
+      if (!['flac', 'wav', 'aiff'].includes(selectedMusicFormat)) {
+        if (musicConversionSettings.bitrateMode === 'vbr' && selectedMusicFormat === 'mp3') {
+          args.push('-q:a', String(musicConversionSettings.vbrQuality));
+        } else {
+          args.push('-b:a', musicConversionSettings.bitrate + 'k');
+        }
+      }
+      args.push(outputName);
+      return args;
+    }
+
+    function getFFmpegGlobals() {
+      const ffmpegGlobal = window.FFmpegWASM || window.FFmpeg;
+      const utilGlobal = window.FFmpegUtil || window.FFmpegUtils || window.FFmpeg;
+      if (!ffmpegGlobal || !ffmpegGlobal.FFmpeg) {
+        throw new Error('FFmpeg library did not load. Check your internet connection or CDN access.');
+      }
+      if (!utilGlobal || !utilGlobal.fetchFile || !utilGlobal.toBlobURL) {
+        throw new Error('FFmpeg utility library did not load. Check your internet connection or CDN access.');
+      }
+      return {
+        FFmpeg: ffmpegGlobal.FFmpeg,
+        fetchFile: utilGlobal.fetchFile,
+        toBlobURL: utilGlobal.toBlobURL
+      };
+    }
+
+    // ── Load FFmpeg ──
+    function warmupFFmpeg() {
+      if (ffmpegLoaded || ffmpegLoading || ffmpegWarmupStarted) return;
+      ffmpegWarmupStarted = true;
+      ensureFFmpeg(setStatus, setProgress).catch(err => {
+        console.warn('FFmpeg warmup failed; it will retry on export.', err);
+        ffmpegWarmupStarted = false;
+        setStatus('', false);
+      });
+    }
+
+    async function ensureFFmpeg(statusFn = setStatus, progressFn = setProgress) {
+      if (ffmpegLoaded) return ffmpegInstance;
+      if (ffmpegLoading) { await new Promise(r => setTimeout(r, 200)); return ensureFFmpeg(statusFn, progressFn); }
+      ffmpegLoading = true;
+      statusFn('Loading media processor (first time only)...', true);
+      progressFn(10);
+      const { FFmpeg, toBlobURL } = getFFmpegGlobals();
+      ffmpegInstance = new FFmpeg();
+      ffmpegInstance.on('progress', ({ progress }) => {
+        activeProgressUpdater(10 + Math.round(progress * 85));
+      });
+      try {
+        const baseURL = 'https://cdn.jsdelivr.net/npm/@ffmpeg/core@0.12.6/dist/umd';
+        await ffmpegInstance.load({
+          coreURL: await toBlobURL(`${baseURL}/ffmpeg-core.js`, 'text/javascript'),
+          wasmURL: await toBlobURL(`${baseURL}/ffmpeg-core.wasm`, 'application/wasm'),
+        });
+        ffmpegLoaded = true;
+        progressFn(100);
+        statusFn('', false);
+        return ffmpegInstance;
+      } catch (err) {
+        ffmpegInstance = null;
+        throw err;
+      } finally {
+        ffmpegLoading = false;
+      }
+    }
+
+    // ── Export ──
+    meExportBtn.addEventListener('click', async () => {
+      if (!musicFile) return;
+      meExportBtn.disabled = true;
+      setMusicStatus('Preparing...', true);
+      setMusicProgress(5);
+      activeProgressUpdater = setMusicProgress;
+      try {
+        const ffmpeg = await ensureFFmpeg(setMusicStatus, setMusicProgress);
+        const { fetchFile } = getFFmpegGlobals();
+
+        setMusicStatus('Loading audio into processor...', true);
+        setMusicProgress(15);
+        const ext = (musicFile.name.split('.').pop() || 'audio').toLowerCase().replace(/[^a-z0-9]/g, '') || 'audio';
+        const inputName = 'audio-input.' + ext;
+        const exportConfig = getMusicExportConfig();
+        const outputName = 'converted-audio.' + exportConfig.ext;
+        await ffmpeg.writeFile(inputName, await fetchFile(musicFile));
+
+        const startT = parseFloat(meTrimStart.value);
+        const endT = parseFloat(meTrimEnd.value);
+        const duration = Math.max(0.1, endT - startT);
+        const args = buildMusicExportArgs(inputName, outputName, startT, duration, exportConfig);
+
+        setMusicStatus('Processing audio...', true);
+        await ffmpeg.exec(args);
+        setMusicProgress(95);
+
+        const data = await ffmpeg.readFile(outputName);
+        const blob = new Blob([data.buffer], { type: exportConfig.mime });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = outputName;
+        a.click();
+        URL.revokeObjectURL(url);
+
+        await ffmpeg.deleteFile(inputName);
+        await ffmpeg.deleteFile(outputName);
+        setMusicProgress(100);
+        setMusicStatus('Download started!', false);
+        setTimeout(() => setMusicStatus('', false), 3000);
+      } catch (err) {
+        console.error(err);
+        setMusicStatus('Error: ' + (err.message || 'Processing failed. Check console.'), false);
+      } finally {
+        meExportBtn.disabled = false;
+      }
+    });
 
     function openExportSettings() {
       if (!videoFile || !exportSettingsModal) return;
@@ -5178,12 +7345,951 @@
     }
 
     // ══════════════════════════════════════════════════════
+    //  WEBRTC RECORDER & MEDIA WORKSPACE JS
     // ══════════════════════════════════════════════════════
 
     // ── Record Panel Controller ──
+    let recStream = null;
+    let recScreenStream = null;
+    let recMediaRecorder = null;
+    let recRecordedChunks = [];
+    let recTimerInterval = null;
+    let recStartTime = 0;
+    let recElapsedTime = 0;
+    let recSourceType = 'camera'; // 'audio', 'camera', 'screen', 'both'
+    let recAudioType = 'mic';    // 'mic', 'system', 'none'
+    let recLastBlob = null;
+    let recLastBlobUrl = null;
+    let recLastKind = 'video';
+    let recCompositeCanvas = null;
+    let recCompositeCtx = null;
+    let recCompositeActive = false;
 
-    // Initialize Default View
-    showHome();
+    // Mode buttons
+    const recModeBtns = document.querySelectorAll('[data-record-mode]');
+    const recSetupView = document.getElementById('recSetupView');
+    const recPreviewWrap = document.getElementById('recPreviewWrap');
+    const recToolbar = document.getElementById('recToolbar');
+    
+    // Preview Video Elements
+    const liveVideo = document.getElementById('liveRecorderPreview');
+    const pipVideo = document.getElementById('pipRecorderPreview');
+    const reviewVideo = document.getElementById('recordedVideoReview');
+    const reviewAudio = document.getElementById('recordedAudioReview');
+    const recAudioOnlyOverlay = document.getElementById('recAudioOnlyOverlay');
+    const recScreenOnlyOverlay = document.getElementById('recScreenOnlyOverlay');
+
+    // Controls Buttons
+    const btnInitStream = document.getElementById('btnInitStream');
+    const btnStartRec = document.getElementById('btnStartRec');
+    const btnPauseRec = document.getElementById('btnPauseRec');
+    const btnResumeRec = document.getElementById('btnResumeRec');
+    const btnStopRec = document.getElementById('btnStopRec');
+    const btnResetRec = document.getElementById('btnResetRec');
+    
+    // Overlays
+    const recDefaultOverlay = document.getElementById('recDefaultOverlay');
+    const recStatusOverlay = document.getElementById('recStatusOverlay');
+    const recStatusTxt = document.getElementById('recStatusTxt');
+    const recTimerVal = document.getElementById('recTimer');
+    
+    // Post Recording actions
+    const recPostActions = document.getElementById('recPostActions');
+    const btnRecImport = document.getElementById('btnRecImport');
+    const recImportLabel = document.getElementById('recImportLabel');
+    const btnRecDownload = document.getElementById('btnRecDownload');
+    const btnRecDiscard = document.getElementById('btnRecDiscard');
+
+    recModeBtns.forEach(btn => {
+      btn.addEventListener('click', () => selectRecMode(btn.dataset.recordMode));
+    });
+
+    btnInitStream.addEventListener('click', initRecStream);
+    btnStartRec.addEventListener('click', startRecording);
+    btnPauseRec.addEventListener('click', pauseRecording);
+    btnResumeRec.addEventListener('click', resumeRecording);
+    btnStopRec.addEventListener('click', stopRecording);
+    btnResetRec.addEventListener('click', stopAndResetAll);
+    btnRecDiscard.addEventListener('click', stopAndResetAll);
+
+    function selectRecMode(mode) {
+      recModeBtns.forEach(btn => btn.classList.toggle('active', btn.dataset.recordMode === mode));
+      recSourceType = mode;
+      recAudioType = mode === 'audio' || mode === 'camera' ? 'mic' : 'system';
+      initRecStream();
+    }
+
+    // Stop streams
+    function stopAllRecTracks() {
+      recCompositeActive = false;
+      if (recStream) {
+        recStream.getTracks().forEach(t => t.stop());
+        recStream = null;
+      }
+      if (recScreenStream) {
+        recScreenStream.getTracks().forEach(t => t.stop());
+        recScreenStream = null;
+      }
+    }
+
+    function setRecPreviewVisible(isVisible) {
+      if (recPreviewWrap) {
+        recPreviewWrap.classList.toggle('hidden', !isVisible);
+        recPreviewWrap.classList.toggle('flex', isVisible);
+      }
+    }
+
+    function setRecFacePreview(isEnabled) {
+      if (recPreviewWrap) recPreviewWrap.classList.toggle('rec-face-preview', isEnabled);
+    }
+
+    function resetRecUI(showModePicker = true) {
+      if (recSetupView) recSetupView.classList.toggle('hidden', !showModePicker);
+      setRecPreviewVisible(!showModePicker);
+      setRecFacePreview(false);
+      if (recToolbar) {
+        recToolbar.classList.toggle('hidden', showModePicker);
+        recToolbar.classList.toggle('flex', !showModePicker);
+      }
+
+      liveVideo.classList.add('hidden');
+      liveVideo.srcObject = null;
+      pipVideo.classList.add('hidden');
+      pipVideo.srcObject = null;
+      reviewVideo.classList.add('hidden');
+      reviewVideo.src = '';
+      if (reviewAudio) {
+        reviewAudio.classList.add('hidden');
+        reviewAudio.src = '';
+      }
+      if (recAudioOnlyOverlay) recAudioOnlyOverlay.classList.add('hidden');
+      if (recScreenOnlyOverlay) recScreenOnlyOverlay.classList.add('hidden');
+      if (showModePicker && recLastBlobUrl) {
+        URL.revokeObjectURL(recLastBlobUrl);
+        recLastBlobUrl = null;
+        recLastBlob = null;
+      }
+      
+      recDefaultOverlay.classList.remove('hidden');
+      recStatusOverlay.classList.add('hidden');
+      recPostActions.classList.add('hidden');
+      
+      btnStartRec.classList.add('hidden');
+      btnPauseRec.classList.add('hidden');
+      btnResumeRec.classList.add('hidden');
+      btnStopRec.classList.add('hidden');
+      btnResetRec.classList.add('hidden');
+      
+      clearInterval(recTimerInterval);
+      recTimerVal.textContent = '00:00';
+    }
+
+    function stopAndResetAll() {
+      stopAllRecTracks();
+      resetRecUI();
+      recModeBtns.forEach(btn => btn.classList.remove('active'));
+      showNotification("Recording reset.", false);
+    }
+
+    async function initRecStream() {
+      try {
+        stopAllRecTracks();
+        resetRecUI(false);
+
+        let cameraStream = null;
+        let screenStream = null;
+        let audioStream = null;
+
+        // 1. Gather Audio Tracks
+        if (recAudioType === 'mic') {
+          try {
+            audioStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+          } catch(e) {
+            console.warn("Microphone access denied: ", e);
+            if (recSourceType === 'audio') throw e;
+            showNotification("Microphone permission denied. Continuing without microphone.");
+          }
+        }
+
+        // 2. Gather Video Tracks based on Selection
+        if (recSourceType === 'audio') {
+          if (!audioStream) {
+            audioStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+          }
+          recStream = audioStream;
+          if (recAudioOnlyOverlay) {
+            recAudioOnlyOverlay.classList.remove('hidden');
+            recAudioOnlyOverlay.classList.add('flex');
+          }
+        }
+        else if (recSourceType === 'camera') {
+          cameraStream = await navigator.mediaDevices.getUserMedia({
+            video: { width: 1280, height: 720, frameRate: 30 },
+            audio: false
+          });
+          recStream = cameraStream;
+          
+          liveVideo.srcObject = recStream;
+          liveVideo.classList.remove('hidden');
+        } 
+        else if (recSourceType === 'screen') {
+          screenStream = await navigator.mediaDevices.getDisplayMedia({
+            video: { width: 1280, height: 720, frameRate: 30 },
+            audio: recAudioType === 'system',
+            selfBrowserSurface: 'exclude',
+            preferCurrentTab: false,
+            surfaceSwitching: 'include'
+          });
+          recStream = screenStream;
+          setRecPreviewVisible(false);
+        } 
+        else if (recSourceType === 'both') {
+          // Capturing screen
+          screenStream = await navigator.mediaDevices.getDisplayMedia({
+            video: { width: 1280, height: 720, frameRate: 30 },
+            audio: recAudioType === 'system',
+            selfBrowserSurface: 'exclude',
+            preferCurrentTab: false,
+            surfaceSwitching: 'include'
+          });
+          
+          // Capturing camera
+          cameraStream = await navigator.mediaDevices.getUserMedia({
+            video: { width: 640, height: 360, frameRate: 30 },
+            audio: false
+          });
+
+          recStream = cameraStream;
+          recScreenStream = screenStream;
+
+          // Keep feeds available for compositing, but do not show the captured screen inside itself.
+          liveVideo.srcObject = screenStream;
+          liveVideo.classList.add('hidden');
+          liveVideo.play().catch(() => {});
+           
+          pipVideo.srcObject = cameraStream;
+          pipVideo.classList.remove('hidden');
+          pipVideo.play().catch(() => {});
+          setRecFacePreview(true);
+          setRecPreviewVisible(true);
+
+          // Initialize canvas PiP compositor
+          setupPiPCompositor(liveVideo, pipVideo);
+        }
+
+        // Combine Audio if any
+        if (audioStream && recSourceType !== 'audio') {
+          const audioTracks = audioStream.getAudioTracks();
+          if (audioTracks.length > 0) {
+            if (recStream) {
+              recStream.addTrack(audioTracks[0]);
+            } else {
+              recStream = new MediaStream([audioTracks[0]]);
+            }
+          }
+        }
+
+        // Stream initialized successfully
+        recDefaultOverlay.classList.add('hidden');
+        recStatusOverlay.classList.remove('hidden');
+        recStatusTxt.textContent = 'READY';
+        btnStartRec.classList.remove('hidden');
+        btnResetRec.classList.remove('hidden');
+        if (btnRecImport) {
+          btnRecImport.classList.toggle('hidden', recSourceType !== 'audio');
+        }
+        if (recImportLabel) {
+          recImportLabel.textContent = 'Send to Audio';
+        }
+
+        showNotification("Capture devices initialized successfully!", false);
+
+      } catch (err) {
+        console.error("Initialization failed: ", err);
+        showNotification("Failed to access screen/camera or user cancelled share request.");
+        stopAndResetAll();
+      }
+    }
+
+    function setupPiPCompositor(bgVideo, fgVideo) {
+      recCompositeCanvas = document.createElement('canvas');
+      recCompositeCanvas.width = 1280;
+      recCompositeCanvas.height = 720;
+      recCompositeCtx = recCompositeCanvas.getContext('2d');
+      recCompositeActive = true;
+
+      function renderLoop() {
+        if (!recCompositeActive) return;
+        
+        // Draw screen stream background
+        if (bgVideo.readyState === bgVideo.HAVE_ENOUGH_DATA) {
+          recCompositeCtx.drawImage(bgVideo, 0, 0, 1280, 720);
+        }
+
+        // Draw camera stream as small PiP inset in bottom-right corner
+        if (fgVideo.readyState === fgVideo.HAVE_ENOUGH_DATA) {
+          recCompositeCtx.save();
+          
+          // Draw round/oval rectangle for inset
+          const insetW = 320;
+          const insetH = 180;
+          const insetX = 1280 - insetW - 24;
+          const insetY = 720 - insetH - 24;
+          const r = 12; // rounded radius
+
+          recCompositeCtx.beginPath();
+          recCompositeCtx.moveTo(insetX + r, insetY);
+          recCompositeCtx.arcTo(insetX + insetW, insetY, insetX + insetW, insetY + insetH, r);
+          recCompositeCtx.arcTo(insetX + insetW, insetY + insetH, insetX, insetY + insetH, r);
+          recCompositeCtx.arcTo(insetX, insetY + insetH, insetX, insetY, r);
+          recCompositeCtx.arcTo(insetX, insetY, insetX + insetW, insetY, r);
+          recCompositeCtx.closePath();
+          recCompositeCtx.clip();
+
+          recCompositeCtx.drawImage(fgVideo, insetX, insetY, insetW, insetH);
+          recCompositeCtx.restore();
+        }
+
+        requestAnimationFrame(renderLoop);
+      }
+
+      // Start looping
+      requestAnimationFrame(renderLoop);
+    }
+
+    function startRecording() {
+      recRecordedChunks = [];
+      recLastKind = recSourceType === 'audio' ? 'audio' : 'video';
+      let captureStream = null;
+
+      if (recSourceType === 'both' && recCompositeCanvas) {
+        captureStream = recCompositeCanvas.captureStream(30);
+        
+        // Inherit audio tracks
+        if (recStream && recStream.getAudioTracks().length > 0) {
+          captureStream.addTrack(recStream.getAudioTracks()[0]);
+        }
+        if (recScreenStream && recScreenStream.getAudioTracks().length > 0) {
+          captureStream.addTrack(recScreenStream.getAudioTracks()[0]);
+        }
+      } else {
+        captureStream = recStream;
+      }
+
+      if (!captureStream) return;
+
+      // Select mimeType support
+      let options = recLastKind === 'audio'
+        ? { mimeType: 'audio/webm;codecs=opus' }
+        : { mimeType: 'video/webm;codecs=vp9,opus' };
+      if (!MediaRecorder.isTypeSupported(options.mimeType)) {
+        options = recLastKind === 'audio'
+          ? { mimeType: 'audio/webm' }
+          : { mimeType: 'video/webm;codecs=vp8,opus' };
+        if (!MediaRecorder.isTypeSupported(options.mimeType)) {
+          options = recLastKind === 'audio' ? { mimeType: '' } : { mimeType: 'video/webm' };
+        }
+      }
+
+      try {
+        recMediaRecorder = options.mimeType ? new MediaRecorder(captureStream, options) : new MediaRecorder(captureStream);
+      } catch (e) {
+        console.error("Failed to create MediaRecorder: ", e);
+        showNotification("MediaRecorder unsupported in this browser.");
+        return;
+      }
+
+      recMediaRecorder.ondataavailable = e => {
+        if (e.data && e.data.size > 0) {
+          recRecordedChunks.push(e.data);
+        }
+      };
+
+      recMediaRecorder.onstop = () => {
+        const fallbackType = recLastKind === 'audio' ? 'audio/webm' : 'video/webm';
+        const blob = new Blob(recRecordedChunks, { type: recMediaRecorder.mimeType || fallbackType });
+        if (recLastBlobUrl) URL.revokeObjectURL(recLastBlobUrl);
+        recLastBlob = blob;
+        recLastBlobUrl = URL.createObjectURL(blob);
+        
+        // Stop compositing loops
+        recCompositeActive = false;
+
+        // Hide live video tags & overlay
+        liveVideo.classList.add('hidden');
+        pipVideo.classList.add('hidden');
+        if (recAudioOnlyOverlay) recAudioOnlyOverlay.classList.add('hidden');
+        if (recScreenOnlyOverlay) recScreenOnlyOverlay.classList.add('hidden');
+        recStatusOverlay.classList.add('hidden');
+        setRecPreviewVisible(true);
+         
+        // Show review player
+        if (recLastKind === 'audio') {
+          reviewVideo.classList.add('hidden');
+          reviewAudio.src = recLastBlobUrl;
+          reviewAudio.classList.remove('hidden');
+        } else {
+          reviewAudio.classList.add('hidden');
+          reviewVideo.src = recLastBlobUrl;
+          reviewVideo.classList.remove('hidden');
+        }
+
+        // Toggle record control buttons
+        btnStartRec.classList.add('hidden');
+        btnPauseRec.classList.add('hidden');
+        btnResumeRec.classList.add('hidden');
+        btnStopRec.classList.add('hidden');
+        btnResetRec.classList.add('hidden');
+        recPostActions.classList.remove('hidden');
+        if (btnRecImport) {
+          btnRecImport.classList.toggle('hidden', recLastKind !== 'audio');
+        }
+
+        showNotification("Recording stopped. Review your clip below!", false);
+      };
+
+      // Start life cycle
+      recMediaRecorder.start(100); // chunk every 100ms
+      recStartTime = Date.now();
+      recElapsedTime = 0;
+
+      recTimerInterval = setInterval(() => {
+        recElapsedTime = Date.now() - recStartTime;
+        const totalSecs = Math.floor(recElapsedTime / 1000);
+        const mins = String(Math.floor(totalSecs / 60)).padStart(2, '0');
+        const secs = String(totalSecs % 60).padStart(2, '0');
+        recTimerVal.textContent = `${mins}:${secs}`;
+      }, 1000);
+
+      // UI state
+      recStatusTxt.textContent = 'RECORDING';
+      btnStartRec.classList.add('hidden');
+      btnStopRec.classList.remove('hidden');
+      btnPauseRec.classList.remove('hidden');
+      btnResetRec.classList.add('hidden');
+    }
+
+    function pauseRecording() {
+      if (recMediaRecorder && recMediaRecorder.state === 'recording') {
+        recMediaRecorder.pause();
+        clearInterval(recTimerInterval);
+        recStatusTxt.textContent = 'PAUSED';
+        btnPauseRec.classList.add('hidden');
+        btnResumeRec.classList.remove('hidden');
+      }
+    }
+
+    function resumeRecording() {
+      if (recMediaRecorder && recMediaRecorder.state === 'paused') {
+        recMediaRecorder.resume();
+        recStartTime = Date.now() - recElapsedTime;
+        recTimerInterval = setInterval(() => {
+          recElapsedTime = Date.now() - recStartTime;
+          const totalSecs = Math.floor(recElapsedTime / 1000);
+          const mins = String(Math.floor(totalSecs / 60)).padStart(2, '0');
+          const secs = String(totalSecs % 60).padStart(2, '0');
+          recTimerVal.textContent = `${mins}:${secs}`;
+        }, 1000);
+
+        recStatusTxt.textContent = 'RECORDING';
+        btnResumeRec.classList.add('hidden');
+        btnPauseRec.classList.remove('hidden');
+      }
+    }
+
+    function stopRecording() {
+      if (recMediaRecorder && recMediaRecorder.state !== 'inactive') {
+        recMediaRecorder.stop();
+        clearInterval(recTimerInterval);
+        stopAllRecTracks();
+      }
+    }
+
+    // Post Recording Buttons
+    btnRecDownload.addEventListener('click', () => {
+      if (!recLastBlob && recRecordedChunks.length === 0) return;
+      const blob = recLastBlob || new Blob(recRecordedChunks, { type: recLastKind === 'audio' ? 'audio/webm' : 'video/webm' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = recLastKind === 'audio' ? 'my-audio-recording.webm' : 'my-recording.webm';
+      a.click();
+      URL.revokeObjectURL(url);
+    });
+
+    btnRecImport.addEventListener('click', () => {
+      if (!recLastBlob && recRecordedChunks.length === 0) return;
+      if (recLastKind !== 'audio') return;
+      const blob = recLastBlob || new Blob(recRecordedChunks, { type: recLastKind === 'audio' ? 'audio/webm' : 'video/webm' });
+      const file = new File(
+        [blob],
+        recLastKind === 'audio' ? 'recording-audio.webm' : 'recording-clip.webm',
+        { type: blob.type || (recLastKind === 'audio' ? 'audio/webm' : 'video/webm') }
+      );
+      
+      loadMusic(file);
+      showMusicEditor();
+      showNotification("Imported recording into Audio successfully!", false);
+      
+      // Reset recorder
+      stopAndResetAll();
+    });
+
+
+    // ── Media Workspace Library Grid Controller ──
+    const medDropZone = document.getElementById('medDropZone');
+    const medFileInput = document.getElementById('medFileInput');
+    const mediaLibraryGrid = document.getElementById('mediaLibraryGrid');
+    const mediaCountLabel = document.getElementById('mediaCountLabel');
+    
+    // Store uploaded files
+    let userUploadedAssets = [];
+    const mediaLibraryDbName = 'photoEditorMediaWorkspace';
+    const mediaLibraryStoreName = 'assets';
+
+    function openMediaLibraryDb() {
+      return new Promise((resolve, reject) => {
+        if (!('indexedDB' in window)) {
+          reject(new Error('IndexedDB is not available in this browser.'));
+          return;
+        }
+
+        const request = indexedDB.open(mediaLibraryDbName, 1);
+        request.onupgradeneeded = event => {
+          const db = event.target.result;
+          if (!db.objectStoreNames.contains(mediaLibraryStoreName)) {
+            const store = db.createObjectStore(mediaLibraryStoreName, { keyPath: 'id' });
+            store.createIndex('createdAt', 'createdAt', { unique: false });
+          }
+        };
+        request.onsuccess = () => resolve(request.result);
+        request.onerror = () => reject(request.error || new Error('Could not open media library storage.'));
+      });
+    }
+
+    async function withMediaLibraryStore(mode, callback) {
+      const db = await openMediaLibraryDb();
+      return new Promise((resolve, reject) => {
+        const transaction = db.transaction(mediaLibraryStoreName, mode);
+        const store = transaction.objectStore(mediaLibraryStoreName);
+        let result;
+        try {
+          result = callback(store);
+        } catch (err) {
+          db.close();
+          reject(err);
+          return;
+        }
+        transaction.oncomplete = () => {
+          db.close();
+          resolve(result);
+        };
+        transaction.onerror = () => {
+          db.close();
+          reject(transaction.error || new Error('Media library storage failed.'));
+        };
+      });
+    }
+
+    function saveAssetToLibrary(asset) {
+      return withMediaLibraryStore('readwrite', store => {
+        store.put({
+          id: asset.id,
+          name: asset.name,
+          type: asset.file.type || '',
+          sizeBytes: asset.file.size,
+          category: asset.category,
+          blob: asset.file,
+          createdAt: asset.createdAt || Date.now()
+        });
+      });
+    }
+
+    function deleteAssetFromLibrary(id) {
+      return withMediaLibraryStore('readwrite', store => {
+        store.delete(id);
+      });
+    }
+
+    function getAllSavedAssets() {
+      return new Promise(async (resolve, reject) => {
+        try {
+          const db = await openMediaLibraryDb();
+          const transaction = db.transaction(mediaLibraryStoreName, 'readonly');
+          const store = transaction.objectStore(mediaLibraryStoreName);
+          const request = store.getAll();
+          request.onsuccess = () => {
+            db.close();
+            resolve(request.result || []);
+          };
+          request.onerror = () => {
+            db.close();
+            reject(request.error || new Error('Could not read saved media assets.'));
+          };
+        } catch (err) {
+          reject(err);
+        }
+      });
+    }
+
+    function makeAssetFromSavedRecord(record) {
+      const file = new File([record.blob], record.name, { type: record.type || record.blob.type || '' });
+      return {
+        id: record.id,
+        file,
+        name: record.name,
+        size: formatBytes(record.sizeBytes || file.size),
+        category: record.category,
+        url: URL.createObjectURL(file),
+        createdAt: record.createdAt || Date.now()
+      };
+    }
+
+    async function loadSavedMediaLibrary() {
+      if (!mediaLibraryGrid) return;
+      try {
+        const savedRecords = await getAllSavedAssets();
+        userUploadedAssets.forEach(asset => {
+          if (asset.url) URL.revokeObjectURL(asset.url);
+        });
+        userUploadedAssets = savedRecords
+          .sort((a, b) => (a.createdAt || 0) - (b.createdAt || 0))
+          .map(makeAssetFromSavedRecord);
+        renderMediaLibraryGrid();
+      } catch (err) {
+        console.error(err);
+        renderMediaLibraryGrid();
+        showNotification('Saved media could not be restored in this browser.');
+      }
+    }
+
+    // Trigger file input
+    medDropZone.addEventListener('click', () => medFileInput.click());
+    
+    medDropZone.addEventListener('dragover', e => {
+      e.preventDefault();
+      medDropZone.classList.add('border-blue-400', 'bg-gray-100/50', 'dark:bg-gray-900/50');
+    });
+
+    medDropZone.addEventListener('dragleave', () => {
+      medDropZone.classList.remove('border-blue-400', 'bg-gray-100/50', 'dark:bg-gray-900/50');
+    });
+
+    medDropZone.addEventListener('drop', e => {
+      e.preventDefault();
+      medDropZone.classList.remove('border-blue-400', 'bg-gray-100/50', 'dark:bg-gray-900/50');
+      handleMediaLibraryUpload(e.dataTransfer.files);
+    });
+
+    medFileInput.addEventListener('change', () => {
+      handleMediaLibraryUpload(medFileInput.files);
+      medFileInput.value = '';
+    });
+
+    async function handleMediaLibraryUpload(files) {
+      const uploadedCategories = new Set();
+      let uploadedCount = 0;
+
+      for (const file of Array.from(files)) {
+        const id = 'asset_' + Date.now() + '_' + Math.random().toString(36).substr(2, 5);
+        const type = file.type;
+        const ext = file.name.split('.').pop().toLowerCase();
+        const audioExtensions = ['mp3', 'wav', 'm4a', 'aac', 'ogg', 'flac', 'wma', 'mpga', 'weba'];
+        const imageExtensions = ['jpg', 'jpeg', 'png', 'gif', 'webp', 'svg', 'bmp', 'tiff'];
+
+        let category = 'image';
+        if (audioExtensions.includes(ext) || type.startsWith('audio/')) {
+          category = 'audio';
+        } else if (imageExtensions.includes(ext) || type.startsWith('image/')) {
+          category = 'image';
+        } else {
+          showNotification(`"${file.name}" is unsupported. Upload an image or audio file.`);
+          continue;
+        }
+
+        const asset = {
+          id: id,
+          file: file,
+          name: file.name,
+          size: formatBytes(file.size),
+          category: category,
+          url: URL.createObjectURL(file),
+          createdAt: Date.now()
+        };
+
+        try {
+          await saveAssetToLibrary(asset);
+          userUploadedAssets.push(asset);
+          uploadedCategories.add(category);
+          uploadedCount += 1;
+        } catch (err) {
+          console.error(err);
+          URL.revokeObjectURL(asset.url);
+          showNotification(`Could not save "${file.name}" for refresh. Browser storage may be full.`);
+        }
+      }
+
+      if (uploadedCount === 0) return;
+
+      const nextFilter = uploadedCategories.size === 1 ? Array.from(uploadedCategories)[0] : 'all';
+      setMediaCategoryFilter(nextFilter);
+      showNotification(`${uploadedCount} ${uploadedCount === 1 ? 'asset' : 'assets'} uploaded to the ${nextFilter === 'all' ? 'media' : nextFilter} section.`, false);
+    }
+
+    function formatBytes(bytes) {
+      if (bytes === 0) return '0 Bytes';
+      const k = 1024;
+      const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+      const i = Math.floor(Math.log(bytes) / Math.log(k));
+      return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+    }
+
+    // Render workspace assets
+    function renderMediaLibraryGrid() {
+      mediaLibraryGrid.innerHTML = '';
+      const isShowingAllMedia = mediaCategoryFilter === 'all';
+      const shouldShowMediaCategory = category => category !== 'video' && (isShowingAllMedia || mediaCategoryFilter === category);
+      const visibleUserUploadedAssets = userUploadedAssets.filter(asset => shouldShowMediaCategory(asset.category));
+
+      // Total count label
+      const totalCount = visibleUserUploadedAssets.length;
+      const mediaLabel = isShowingAllMedia ? 'assets' : `${mediaCategoryFilter} assets`;
+      mediaCountLabel.textContent = `${totalCount} ${mediaLabel} loaded`;
+
+      if (totalCount === 0) {
+        // Show premium empty state
+        const emptyState = document.createElement('div');
+        emptyState.className = 'col-span-full py-16 flex flex-col items-center justify-center text-center text-gray-400 dark:text-gray-500';
+        emptyState.innerHTML = `
+          <div class="w-16 h-16 rounded-full bg-gray-100 dark:bg-gray-800/40 flex items-center justify-center mb-4 border border-gray-200 dark:border-gray-700/50">
+            <i class="ri-folder-open-line text-3xl text-gray-400"></i>
+          </div>
+          <p class="text-base font-semibold text-gray-700 dark:text-gray-300">Your library is empty</p>
+          <p class="text-xs text-gray-500 max-w-xs mt-1">Drag &amp; drop files or click browse above to upload images or audio tracks.</p>
+        `;
+        mediaLibraryGrid.appendChild(emptyState);
+        return;
+      }
+
+      // ── Render User Uploaded Cards ──
+      visibleUserUploadedAssets.forEach(asset => {
+        const card = document.createElement('div');
+        card.className = 'flex flex-col bg-gray-50 dark:bg-gray-900/30 border border-gray-200 dark:border-gray-700 rounded-xl overflow-hidden transition-all hover:-translate-y-0.5 hover:shadow-sm relative';
+        
+        let visualHTML = '';
+        let buttonHTML = '';
+
+        if (asset.category === 'image') {
+          visualHTML = `<img src="${asset.url}" class="w-full h-full object-cover" />`;
+          buttonHTML = `
+            <button type="button" class="w-full py-1 text-[11px] bg-blue-100 hover:bg-blue-200 text-blue-600 dark:bg-blue-500/20 dark:text-blue-300 rounded-md font-semibold border border-blue-200 dark:border-blue-500/20 text-center" onclick="loadUserAssetToPhoto(${userUploadedAssets.indexOf(asset)})">
+              Edit Photo
+            </button>
+          `;
+        } 
+        else if (asset.category === 'audio') {
+          visualHTML = `
+            <div class="flex flex-col items-center">
+              <i class="ri-music-2-line text-4xl text-purple-500"></i>
+              <span class="text-[10px] text-gray-400 uppercase tracking-widest font-mono mt-1">Audio track</span>
+            </div>
+          `;
+          buttonHTML = `
+            <button type="button" class="flex-1 py-1 text-[11px] bg-purple-100 hover:bg-purple-200 text-purple-600 dark:bg-purple-500/20 dark:text-purple-300 rounded-md font-semibold border border-purple-200 dark:border-purple-500/20 text-center" onclick="loadUserAssetToAudio(${userUploadedAssets.indexOf(asset)})">
+              Edit Audio
+            </button>
+          `;
+        }
+
+        card.innerHTML = `
+          <div class="aspect-[4/3] bg-gray-100 dark:bg-gray-850 relative flex items-center justify-center overflow-hidden border-b border-gray-200 dark:border-gray-700/40">
+            ${visualHTML}
+            <button class="absolute top-2 right-2 bg-black/60 hover:bg-red-500 text-white rounded-full p-1 flex items-center justify-center w-6 h-6 text-xs border border-white/10 shadow transition-all" onclick="deleteUserAsset(${userUploadedAssets.indexOf(asset)})" title="Delete asset">
+              <i class="ri-delete-bin-line"></i>
+            </button>
+          </div>
+          <div class="p-2.5 flex flex-col flex-grow">
+            <p class="text-xs font-semibold text-gray-900 dark:text-white truncate" title="${asset.name}">${asset.name}</p>
+            <p class="text-[11px] text-gray-500 mt-0.5 font-mono">${asset.size} &bull; ${asset.category.toUpperCase()}</p>
+            <div class="mt-2 pt-2 border-t border-gray-200/50 dark:border-gray-750 flex gap-2">
+              ${buttonHTML}
+            </div>
+          </div>
+        `;
+        mediaLibraryGrid.appendChild(card);
+      });
+    }
+
+    // Delete user asset
+    window.deleteUserAsset = function(index) {
+      const asset = userUploadedAssets[index];
+      if (asset) {
+        URL.revokeObjectURL(asset.url);
+        userUploadedAssets.splice(index, 1);
+        renderMediaLibraryGrid();
+        showNotification("Asset deleted from Workspace library.", false);
+        deleteAssetFromLibrary(asset.id).catch(err => {
+          console.error(err);
+          showNotification("Asset was removed here, but browser storage cleanup failed.");
+        });
+      }
+    };
+
+    // User Asset Load Bridges
+    window.loadUserAssetToPhoto = function(index) {
+      const asset = userUploadedAssets[index];
+      if (asset && asset.file) {
+        addFiles([asset.file]);
+        showHome();
+        showNotification("Loaded asset into Photo Editor!", false);
+      }
+    };
+
+    window.loadUserAssetToVideo = function(index) {
+      const asset = userUploadedAssets[index];
+      if (asset && asset.file) {
+        loadVideo(asset.file);
+        showVideoEditor();
+        showNotification("Loaded asset into Video Editor!", false);
+      }
+    };
+
+    window.loadUserAssetToAudio = function(index) {
+      const asset = userUploadedAssets[index];
+      if (asset && asset.file) {
+        loadMusic(asset.file);
+        showMusicEditor();
+        showNotification("Loaded asset into Music Editor!", false);
+      }
+    };
+
+    // ── Preloaded Samples Load Functions ──
+
+    // 1. Fetch sample profile photo and inject into photo list
+    window.loadSampleToPhotoEditor = function(url, filename) {
+      showNotification("Loading sample photo, please wait...", false);
+      fetch(url)
+        .then(res => res.blob())
+        .then(blob => {
+          const file = new File([blob], filename, { type: 'image/jpeg' });
+          addFiles([file]);
+          showHome();
+          showNotification("Sample photo loaded into Photo Editor!", false);
+        })
+        .catch(err => {
+          console.error(err);
+          showNotification("Failed to fetch sample photo. Please upload your own.");
+        });
+    };
+
+    window.loadSamplePhotoToVideoEditor = function() {
+      showNotification("Loading sample photo...", false);
+      const url = 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=800&auto=format&fit=crop&q=80';
+      fetch(url)
+        .then(res => res.blob())
+        .then(blob => {
+          const file = new File([blob], 'sample.jpg', { type: 'image/jpeg' });
+          loadVideo(file);
+          showVideoEditor();
+          showNotification("Sample photo loaded into Video Editor successfully!", false);
+        })
+        .catch(err => {
+          console.error(err);
+          showNotification("Failed to load sample photo. Try uploading your own.");
+        });
+    };
+
+    // 2. Fetch sample video, convert to File object, and load
+    window.loadSampleToVideoEditor = function() {
+      showNotification("Loading sample video...", false);
+      // Beautiful short sample video b-roll
+      const url = 'https://assets.mixkit.co/videos/preview/mixkit-software-developer-working-on-his-computer-34288-large.mp4';
+      
+      fetch(url)
+        .then(res => res.blob())
+        .then(blob => {
+          const file = new File([blob], 'sample.mp4', { type: 'video/mp4' });
+          loadVideo(file);
+          showVideoEditor();
+          showNotification("Sample video loaded into Video Editor successfully!", false);
+        })
+        .catch(err => {
+          console.error(err);
+          showNotification("Failed to load sample video. Try uploading your own.");
+        });
+    };
+
+    function createSyntheticAudioBlob() {
+      const sampleRate = 8000;
+      const duration = 5;
+      const numSamples = sampleRate * duration;
+      const buffer = new ArrayBuffer(44 + numSamples * 2);
+      const view = new DataView(buffer);
+
+      function writeString(view, offset, string) {
+        for (let i = 0; i < string.length; i++) {
+          view.setUint8(offset + i, string.charCodeAt(i));
+        }
+      }
+
+      /* RIFF identifier */
+      writeString(view, 0, 'RIFF');
+      /* file length */
+      view.setUint32(4, 36 + numSamples * 2, true);
+      /* RIFF type */
+      writeString(view, 8, 'WAVE');
+      /* format chunk identifier */
+      writeString(view, 12, 'fmt ');
+      /* format chunk length */
+      view.setUint32(16, 16, true);
+      /* sample format (raw) */
+      view.setUint16(20, 1, true);
+      /* channel count */
+      view.setUint16(22, 1, true);
+      /* sample rate */
+      view.setUint32(24, sampleRate, true);
+      /* byte rate */
+      view.setUint32(28, sampleRate * 2, true);
+      /* block align */
+      view.setUint16(32, 2, true);
+      /* bits per sample */
+      view.setUint16(34, 16, true);
+      /* data chunk identifier */
+      writeString(view, 36, 'data');
+      /* data chunk length */
+      view.setUint32(40, numSamples * 2, true);
+
+      const frequency = 440; // A4 note
+      let offset = 44;
+      for (let i = 0; i < numSamples; i++) {
+        const sample = Math.sin((2 * Math.PI * frequency * i) / sampleRate);
+        const val = Math.floor(sample * 32767);
+        view.setInt16(offset, val, true);
+        offset += 2;
+      }
+
+      return new Blob([buffer], { type: 'audio/wav' });
+    }
+
+    // 3. Generate synthetic sample audio, convert to File object, and load
+    window.loadSampleToMusicEditor = function() {
+      showNotification("Generating sample audio soundtrack...", false);
+      try {
+        const blob = createSyntheticAudioBlob();
+        const file = new File([blob], 'sample.wav', { type: 'audio/wav' });
+        loadMusic(file);
+        showMusicEditor();
+        showNotification("Sample soundtrack generated & loaded into Music Editor!", false);
+      } catch (err) {
+        console.error(err);
+        showNotification("Failed to load sample audio. Try uploading your own.");
+      }
+    };
+
+    if (mediaLibraryGrid) {
+      setMediaCategoryFilter('all');
+      loadSavedMediaLibrary();
+    }
 
   })();
   </script>
